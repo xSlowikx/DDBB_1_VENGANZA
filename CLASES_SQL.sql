@@ -61,3 +61,7 @@ where nro in (1001,1002,5,7,9);
 select distinct nro_jefe from empleado
 where nro_jefe is not null;
 
+#PRACTICA INSERT INTO
+insert into empleado (nombre,cod_esp,sueldo,f_ingreso) values ("Hector",2,5000,"2020-01-01");
+select * from empleado;
+insert into empleado (nombre,cod_esp,sueldo,f_ingreso) values ("Josejose","2","100000","2020-01-01");
