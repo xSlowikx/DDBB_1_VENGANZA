@@ -65,3 +65,51 @@ where nro_jefe is not null;
 insert into empleado (nombre,cod_esp,sueldo,f_ingreso) values ("Hector",2,5000,"2020-01-01");
 select * from empleado;
 insert into empleado (nombre,cod_esp,sueldo,f_ingreso) values ("Josejose","2","100000","2020-01-01");
+
+#Ejercicio 1 - 23/05/2023
+select empleado.nombre, especialidad.descripcion from empleado, especialidad
+where empleado.cod_esp = especialidad.cod_esp;
+
+#JOIN (INNER) junta las tablas donde se cumple la condicion de junta en ambas tablas.
+#tablax JOIN tablax2 ON condicion de junta
+select empleado.nombre, especialidad.descripcion
+from empleado join especialidad
+ON empleado.cod_esp = especialidad.cod_esp;
+
+#Ejercicio 2 - 23/05/2023
+select empleado.nombre, area.descripcion from
+empleado join trabaja
+on empleado.nro = trabaja.nro_emp
+join area on trabaja.cod_area = area.cod_area
+where trabaja.cod_area = "A1";
+
+#Ejercicio 3 - 23/05/2023
+select em1.nombre, em1.nro_jefe, em2.nombreempleadoempleado
+from empleado em1 join empleado em2
+on em1.nro_jefe = em2.nro;
+
+#Ejercicio 4 - 23/05/2023
+#JOIN (LEFT) junta las tablas, respetando la primer tabla y completa con nulos de la segunda si no hay registros de la primer tabla que cumplan la condicion
+select em1.nombre, em1.nro_jefe, em2.nombre
+from empleado em1 left join empleado em2
+on em1.nro_jefe = em2.nro;
+
+#Ejercicio 5 - 23/05/2023
+
+select empleado.nombre, area.descripcion from
+empleado join trabaja on empleado.nro = trabaja.nro_emp
+join area on trabaja.cod_area = area.cod_area
+where area.descripcion = "Area 1"
+and empleado.sueldo > 5000;
+
+select empleado.nombre, area.descripcion from
+empleado join trabaja on empleado.nro = trabaja.nro_emp
+join area on trabaja.cod_area = area.cod_area;
+
+select * from trabaja;
+
+#RIGHT JOIN, lo contrario a left join, respeta la tabla de la derecha
+
+#NATURAL JOIN, joinea por los campos que tengan el mismo nombre, basicamente no requiere un ON y los combina por el mismo nombre
+
+#
