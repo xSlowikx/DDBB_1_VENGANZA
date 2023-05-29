@@ -142,14 +142,21 @@ where nombre like "f%";
 
 #13. Listar el promedio de precios de los artículos por cada almacén (nombre) 
 
-select *, avg(articulo.precio)
+# avg(articulo.precio)
+select *
 from contiene join articulo
 on contiene.cod_art = articulo.cod_art
 join almacen
-on almacen.nro = contiene.nro_almacen
-group by almacen.nro;
+on almacen.nro = contiene.nro_almacen;
+#group by almacen.nro
 
-#14. Listar la descripción de artículos compuestos por al menos 2 materiales. 
+#14. Listar la descripción de artículos compuestos por al menos 2 materiales.
+
+#Borrando el * y reemplazandolo por articulo.descripcion y el count, respondo la consigna
+select *, count(compuesto_por.cod_art) as cantidad_materiales from compuesto_por
+join articulo on compuesto_por.cod_art = articulo.cod_art
+group by compuesto_por.cod_art;
+
 #15. Listar cantidad de materiales que provee cada proveedor (código, nombre y domicilio) 
 #16. Cuál es el precio máximo de los artículos que proveen los proveedores de la ciudad de Zárate. 
 #17. Listar los nombres de aquellos proveedores que no proveen ningún material. 

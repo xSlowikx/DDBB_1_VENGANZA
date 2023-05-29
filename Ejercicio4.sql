@@ -29,3 +29,16 @@ create table if not exists trabaja (
     constraint fk_nro_empresa foreign key (nro_empresa) references empresa (nro_empresa)
 );
 
+#1 Listar el nombre y la ciudad de todas las personas que trabajan en la empresa "Banelco".
+
+#2 Listar el nombre, calle y ciudad de todas las personas que trabajan para la empresa "Paulinas" y ganan más de $1500.
+
+#3 Listar el nombre de personas que viven en la misma ciudad en la que se halla la empresa en la que trabajan.
+
+#4 Listar el número y nombre de todas las personas que viven en la misma ciudad y en la misma calle que su supervisor.
+
+#5 Listar el nombre y ciudad de todas las personas que ganan más que cualquier empleado de la empresa "Tecnosur".
+
+#6 Listar las ciudades en las que todos los trabajadores que vienen en ellas ganan más de $1000.
+
+#7 Listar el nombre de los empleados que hayan ingresado en más de 4 empresas en el periodo del 01-01-2000 al 31-03-2004.

@@ -36,3 +36,11 @@ create table if not exists viaje (
     constraint fk_nro_cliente foreign key (nro_cliente) references cliente (nro_cliente),
     constraint fk_patente foreign key (patente) references auto (patente)
 );
+
+#1 Cuál es el tiempo de espera promedio de los viajes del año 2005?
+#2 Listar el nombre de los clientes que hayan viajado en todos los autos.
+#3 Listar nombre y teléfono de los choferes que no hayan manejado algún vehículo de modelo posterior al año 2010.
+#4 Listar los kilómetros realizados en viajes por cada auto (patente y modelo).
+#5 Mostrar el costo promedio de los viajes realizados por cada auto (patente), para viajes de clientes de la localidad de Ramos Mejía.
+#6 Listar el costo total de los viajes realizados por cada chofer (número y nombre) cuyo nombre comienza con la letra A.
+#7 Mostrar la fecha de ingreso, el nombre del chofer y nombre de cliente, que hayan realizado el viaje más largo de la historia.
