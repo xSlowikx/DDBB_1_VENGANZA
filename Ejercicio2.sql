@@ -28,7 +28,8 @@ create table if not exists pasajero (
 
 #1.Hallar los números de vuelo desde el origen A hasta el destino F.
 
-select nro_vuelo from vuelo
+#nro_vuelo
+select * from vuelo
 where desde = "A" and hasta = "F";
 
 #2.Hallar los nombres de pasajeros y números de vuelo para aquellos pasajeros que viajan desde A a D.
@@ -47,7 +48,7 @@ where desde = "C";
 
 #4.Listar los distintos tipo y nro. de avión que tienen a H como destino.
 
-#avion.nro_avion, avion.tipo_avion
+#distinct avion.nro_avion, avion.tipo_avion
 select * from vuelo
 join avion on vuelo.nro_avion = avion.nro_avion
 where hasta = "H";
