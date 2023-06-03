@@ -116,9 +116,18 @@ join ciudad
 on proveedor.cod_ciu = ciudad.cod_ciu
 where ciudad.nombre = "Rosario";
 
+select material.cod_mat, material.descripcion from provisto_por, material, proveedor, ciudad
+where provisto_por.cod_mat = material.cod_mat
+and provisto_por.cod_prov = proveedor.cod_prov
+and proveedor.cod_ciu = ciudad.cod_ciu
+and ciudad.nombre = "Rosario";
+
 #9. Listar los nombres de los proveedores que proveen materiales para artículos ubicados en almacenes que Martín Gómez tiene a su cargo. 
 
-select *
+# En esta consulta, hay 2 saltos omitibles, la tabla de materiales y articulos no son necesarias ya que solo son un puente pero de todas maneras --
+# podemos obtener esos datos utilizando las otras tablas
+
+select distinct proveedor.nombre, almacen.nombre
 from provisto_por join proveedor
 on provisto_por.cod_prov = proveedor.cod_prov
 join material
@@ -133,6 +142,7 @@ join almacen
 on contiene.nro_almacen = almacen.nro
 where almacen.responsable = "Martin Gomez";
 
+
 #10. Mover los artículos almacenados en el almacén de número 10 al de número 20
 #11. Eliminar a los proveedores que contengan la palabra ABC en su nombre 
 #12. Indicar la cantidad de proveedores que comienzan con la letra F.
@@ -143,23 +153,79 @@ where nombre like "f%";
 #13. Listar el promedio de precios de los artículos por cada almacén (nombre) 
 
 # avg(articulo.precio)
-select *
+select almacen.nombre, avg(articulo.precio)
 from contiene join articulo
 on contiene.cod_art = articulo.cod_art
 join almacen
-on almacen.nro = contiene.nro_almacen;
-#group by almacen.nro
+on almacen.nro = contiene.nro_almacen
+group by almacen.nro, almacen.nombre;
+
+select *, avg(articulo.precio)
+from contiene join articulo
+on contiene.cod_art = articulo.cod_art
+join almacen
+on almacen.nro = contiene.nro_almacen
+group by almacen.nro, almacen.nombre;
 
 #14. Listar la descripción de artículos compuestos por al menos 2 materiales.
 
 #Borrando el * y reemplazandolo por articulo.descripcion y el count, respondo la consigna
-select *, count(compuesto_por.cod_art) as cantidad_materiales from compuesto_por
+#
+select articulo.descripcion, count(articulo.cod_art) as cantidad_materiales from compuesto_por
 join articulo on compuesto_por.cod_art = articulo.cod_art
-group by compuesto_por.cod_art;
+group by articulo.cod_art, articulo.descripcion
+having cantidad_materiales >= 2;
+
+select * from compuesto_por
+join articulo on compuesto_por.cod_art = articulo.cod_art
+order by articulo.cod_art;
+
 
 #15. Listar cantidad de materiales que provee cada proveedor (código, nombre y domicilio) 
+
+select proveedor.cod_prov, proveedor.nombre, proveedor.domicilio, count(proveedor.cod_prov) as cantidad_provista from proveedor
+join provisto_por on proveedor.cod_prov = provisto_por.cod_prov
+group by proveedor.cod_prov, proveedor.nombre;
+
+select * from provisto_por
+join proveedor on provisto_por.cod_prov = proveedor.cod_prov
+order by proveedor.cod_prov;
+
 #16. Cuál es el precio máximo de los artículos que proveen los proveedores de la ciudad de Zárate. 
+
+select max(articulo.precio) from proveedor
+join provisto_por on proveedor.cod_prov = provisto_por.cod_prov
+join compuesto_por on provisto_por.cod_mat = compuesto_por.cod_mat
+join articulo on compuesto_por.cod_art = articulo.cod_art
+join ciudad on proveedor.cod_ciu = ciudad.cod_ciu
+where ciudad.nombre = "Zarate"
+order by articulo.cod_art;
+
+select * from proveedor
+join provisto_por on proveedor.cod_prov = provisto_por.cod_prov
+join compuesto_por on provisto_por.cod_mat = compuesto_por.cod_mat
+join articulo on compuesto_por.cod_art = articulo.cod_art
+join ciudad on proveedor.cod_ciu = ciudad.cod_ciu
+where ciudad.nombre = "Zarate"
+order by articulo.cod_art;
+
 #17. Listar los nombres de aquellos proveedores que no proveen ningún material. 
+
+#select proveedor.nombre, esta es una manera donde si simplemente al hacer el left join aparece un valor nulo en cod_prov, significa que ese proveedor --
+# -- no aparece nunca en esa tabla, por lo cual no provee materiales, aunque tambien se puede usar provisto_por.cod_mat (aunque no tendria sentido o --
+# -- seria lo mismo ya que la tabla tiene como pk estos campos asi que si uno es nulo, el otro tambien.
+
+select * from proveedor
+left join provisto_por on proveedor.cod_prov = provisto_por.cod_prov
+where provisto_por.cod_prov is null;
+
+
+# Igual que en el anterior, con el left join puedo ver que el codigo no aparece nunca en la tabla provisto_por, y tambien podria usar el cod_mat
+select proveedor.nombre, count(provisto_por.cod_prov) as materiales_provistos from proveedor
+left join provisto_por on proveedor.cod_prov = provisto_por.cod_prov
+group by proveedor.cod_prov, proveedor.nombre
+having materiales_provistos = 0;
+
 #18. Listar los códigos de los materiales que provea el proveedor 10 y no los provea el proveedor 15. 
 #19. ListarnúmeroynombredealmacenesquecontienenlosartículosdedescripciónA             y los de descripción B (ambos). 
 #20. Listar la descripción de artículos compuestos por todos los materiales. 

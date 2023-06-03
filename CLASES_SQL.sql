@@ -112,4 +112,51 @@ select * from trabaja;
 
 #NATURAL JOIN, joinea por los campos que tengan el mismo nombre, basicamente no requiere un ON y los combina por el mismo nombre
 
-#
+#CLASE DE CONSULTAS DE AGREGACION
+
+# ** CONSIDERACION GENERAL: LOS SELECT ACTUAN SOBRE LA TABLA TEMPORAL AGRUPADA, SI BIEN EL MOTOR HACE COSAS RARAS SI LE MANDO EN EL SELECT COSAS QUE NO ESTAN EN EL GROUP BY, EXCEPTUANDO --
+#-- LAS FUNCIONES DE AGREGACION, POR OTRO LADO, SE DEBE UTILIZAR EN EL SELECT UNICAMENTE COSAS DECLARADAS EN EL "GROUP BY", TODO LO QUE ESTE EN EL SELECT CAE AL GROUP BY, AUNQUE NO --
+#-- NECESARIAMENTE TODO LO QUE ESTE EN EL GROUP BY TIENE QUE IR AL SELECT **
+
+#Ejercicio 1
+select count(*) from empleado;
+
+#Ejercicio 2
+#Ejercicio 3
+
+#Ejercicio 4
+select * from empleado;
+
+select nombre, cod_esp, min(sueldo) from empleado
+group by cod_esp;
+
+#Ejercicio 5
+
+select cod_esp, min(sueldo) sueldo_minimo from empleado
+group by cod_esp
+having sueldo_minimo > 3000;
+
+#Ejercicio 6
+select cod_esp, min(sueldo) from empleado
+group by cod_esp
+having count(*) > 1;
+
+
+#Ejercicio 7
+
+select especialidad.cod_esp, especialidad.descripcion, count(*)
+from empleado join especialidad on empleado.cod_esp = especialidad.cod_esp
+group by especialidad.cod_esp, especialidad.descripcion;
+
+#Ejercicio 8
+select nro_jefe, count(*) from empleado
+group by nro_jefe
+having nro_jefe is not null;
+
+#Ejercicio 9
+select e2.nombre, e1.nro_jefe, count(*) from empleado e1 join empleado e2 on e1.nro_jefe = e2.nro
+group by e2.nro_jefe, e2.nombre;
+
+#Ejercicio 10
+
+select count(distinct nro_jefe) as cantidad_jefes from empleado;
