@@ -170,11 +170,14 @@ group by almacen.nro, almacen.nombre;
 #14. Listar la descripción de artículos compuestos por al menos 2 materiales.
 
 #Borrando el * y reemplazandolo por articulo.descripcion y el count, respondo la consigna
-#
-select articulo.descripcion, count(articulo.cod_art) as cantidad_materiales from compuesto_por
+
+
+#Dos cosas raras, tener en cuenta la funcionalidad de la tabla temporal agrupada y como se ve realmente antes --
+# -- de hacer los select
+select articulo.cod_art, articulo.descripcion, count(compuesto_por.cod_mat) as cantidad_materiales from compuesto_por
 join articulo on compuesto_por.cod_art = articulo.cod_art
 group by articulo.cod_art, articulo.descripcion
-having cantidad_materiales >= 2;
+having count(compuesto_por.cod_mat) >= 2;
 
 select * from compuesto_por
 join articulo on compuesto_por.cod_art = articulo.cod_art
@@ -183,9 +186,11 @@ order by articulo.cod_art;
 
 #15. Listar cantidad de materiales que provee cada proveedor (código, nombre y domicilio) 
 
-select proveedor.cod_prov, proveedor.nombre, proveedor.domicilio, count(proveedor.cod_prov) as cantidad_provista from proveedor
-join provisto_por on proveedor.cod_prov = provisto_por.cod_prov
-group by proveedor.cod_prov, proveedor.nombre;
+
+#TENER EN CUENTA EL LET JOIN, YA QUE SI EL PROVEEDOR PROVEE 0 MATERIALES NO IBA A APARECER EN LA QUERY ANTERIOR D:
+select proveedor.cod_prov, proveedor.nombre, proveedor.domicilio, count(provisto_por.cod_mat) as cantidad_provista from proveedor
+left join provisto_por on proveedor.cod_prov = provisto_por.cod_prov
+group by proveedor.cod_prov, proveedor.nombre, proveedor.domicilio;
 
 select * from provisto_por
 join proveedor on provisto_por.cod_prov = proveedor.cod_prov
@@ -198,8 +203,7 @@ join provisto_por on proveedor.cod_prov = provisto_por.cod_prov
 join compuesto_por on provisto_por.cod_mat = compuesto_por.cod_mat
 join articulo on compuesto_por.cod_art = articulo.cod_art
 join ciudad on proveedor.cod_ciu = ciudad.cod_ciu
-where ciudad.nombre = "Zarate"
-order by articulo.cod_art;
+where ciudad.nombre = "Zarate";
 
 select * from proveedor
 join provisto_por on proveedor.cod_prov = provisto_por.cod_prov
@@ -217,17 +221,47 @@ order by articulo.cod_art;
 
 select * from proveedor
 left join provisto_por on proveedor.cod_prov = provisto_por.cod_prov
-where provisto_por.cod_prov is null;
+where provisto_por.cod_mat is null;
 
 
 # Igual que en el anterior, con el left join puedo ver que el codigo no aparece nunca en la tabla provisto_por, y tambien podria usar el cod_mat
-select proveedor.nombre, count(provisto_por.cod_prov) as materiales_provistos from proveedor
+select proveedor.nombre, count(provisto_por.cod_mat) as materiales_provistos from proveedor
 left join provisto_por on proveedor.cod_prov = provisto_por.cod_prov
 group by proveedor.cod_prov, proveedor.nombre
 having materiales_provistos = 0;
 
 #18. Listar los códigos de los materiales que provea el proveedor 10 y no los provea el proveedor 15. 
-#19. ListarnúmeroynombredealmacenesquecontienenlosartículosdedescripciónA             y los de descripción B (ambos). 
+
+#PARA ENTENDERME MEJOR, BASICAMENTE PREGUNTO POR LOS COD_MAT DE PROVISTO POR QUE NO SE ENCUENTREN EN LA COLUMNA QUE ME DEVUELVE LA SUBCONSULTA, TRANQUILAMENTE --
+# -- SE PUEDE REALIZAR A LA INVERSA TAMBIEN.
+select proveedor.cod_prov, proveedor.nombre, provisto_por.cod_mat from proveedor
+join provisto_por on proveedor.cod_prov = provisto_por.cod_prov
+where proveedor.cod_prov = 10
+and provisto_por.cod_mat not in (select provisto_por.cod_mat from proveedor
+join provisto_por on proveedor.cod_prov = provisto_por.cod_prov
+where proveedor.cod_prov = 15);
+
+#Materiales provistos por el proveedor 15
+select provisto_por.cod_mat from proveedor
+join provisto_por on proveedor.cod_prov = provisto_por.cod_prov
+where proveedor.cod_prov = 15;
+
+#Materiales provisto por el proveedor 10
+select provisto_por.cod_mat from proveedor
+join provisto_por on proveedor.cod_prov = provisto_por.cod_prov
+where proveedor.cod_prov = 10;
+
+#19. Listar número y nombre de almacenes que contienen los artículos de descripción A y los de descripción B (ambos).
+
+select * from almacen
+join contiene on almacen.nro = contiene.nro_almacen
+join articulo on contiene.cod_art = articulo.cod_art
+where articulo.descripcion like "Harina" union (
+	select * from almacen almacen2
+	join contiene contiene2 on almacen2.nro = contiene2.nro_almacen
+	join articulo articulo2 on contiene2.cod_art = articulo2.cod_art
+	where articulo2.descripcion like "Jabon de ropa");
+
 #20. Listar la descripción de artículos compuestos por todos los materiales. 
 #21. Hallarloscódigosynombresdelosproveedoresqueproveenalmenosunmaterial              que se usa en algún artículo cuyo precio es mayor a $100. 
 #22. Listar la descripción de los artículos de mayor precio. 
@@ -235,5 +269,3 @@ having materiales_provistos = 0;
 #24. Listar los nombres de almacenes que almacenan la mayor cantidad de artículos. 
 #25. Listar la ciudades donde existan proveedores que proveen todos los materiales. 
 #26. Listarlosnúmerosdealmacenesquetienentodoslosartículosqueincluyenel             material con código 123. 
-
-

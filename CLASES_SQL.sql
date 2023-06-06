@@ -160,3 +160,104 @@ group by e2.nro_jefe, e2.nombre;
 #Ejercicio 10
 
 select count(distinct nro_jefe) as cantidad_jefes from empleado;
+
+#CONSULTAS DE MODIFICACION DE TABLAS, INSERT (DENUEVO), UPDATE Y DELETE
+
+#SINTAXIS UPDATE: UPDATE tabla SET campo1 = x, campo2= y, campo3= z, WHERE condicion;
+#Modificar codigo de especialidad del empleado 5 a la numero 3
+
+UPDATE empleado
+SET cod_esp = 3
+WHERE nro = 5;
+
+#Incrementar en $1000 el sueldo de todos los empleados
+update empleado set sueldo = sueldo + 1000
+where nro is not null;
+
+#SUBCONSULTAS - INTRODUCCION
+
+#Ejercicio 1 - Listar los nombres de los empleados que trabajan en algun area que termina con la letra S
+#Normalmente para evitar repetidos y que los registros esten bien identificados, es una idea realizar la agrupacion con group by
+
+select * from empleado join trabaja
+on empleado.nro = trabaja.nro_emp
+join area
+on trabaja.cod_area = area.cod_area
+where area.descripcion like "%s"
+group by empleado.nro, empleado.nombre;
+
+#MISMO RESULTADO, PERO UTILIZANDO UNA SUBCONSULTA
+#PARA UTILIZAR IN || NOT IN, NUESTRA SUBCONSULTA TIENE QUE DEVOLVER UN SOLO CAMPO Y EL TIPO DE DATO DEL CAMPO TIENE QUE SER COMPATIBLE PARA LA COMPARACION PREVIA, VAMOS A --
+# -- REALIZARNOS LA PREGUNTA, "EL VALOR QUE ESTOY BUSCANDO, PERTENECE AL RESULTADO O, ESTÁ EN EL CONJUNTO QUE ME DEVUELVE EL 'IN'?????
+
+select empleado.nro, empleado.nombre from empleado
+where empleado.nro in (
+	select trabaja.nro_emp from trabaja
+    join area on trabaja.cod_area = area.cod_area
+    where descripcion like "%s"
+    );
+    
+
+#SUBCONSULTAS CON EL PREDICADO "EXISTS" || "NOT EXISTS", PARA SU USO, ESTO DEVUELVE VERDADERO O FALSO, SI ES VERDADERO LO MUESTRA, SI NO ES VERDADERO NO LO MUESTRA --
+# -- SI EL RESULTADO DE LA SUBCONSULTA ES ALMENOS 1 REGISTRO, SE TOMA COMO VERDADERO Y SE CONTRASTA CONTRA EL SELECT PRINCIPAL Y EL FROM, ES FALSO CUANDO NO DEVUELVE NADA --
+# -- LA SUBCONSULTA
+#PARA EL USO DEL EXISTS, DEBEMOS TENER EN CUENTA AGREGAR UNA CONDICION EXTRA DENTRO DE LA SUBCONSULTA, YA QUE SINO ES PROBABLE QUE SIEMPRE DEVUELVA TRUE, Y TAMBIEN PARA OPTIMIZAR --
+# -- LAS CONSULTAS, PODEMOS PONER "SELECT 1" YA QUE NO IMPORTA QUE DEVUELVE EL EXISTS, SINO QUE SI ES TRUE O FALSE DADO QUE SE BASA EN LA CANTIDAD DE REGISTROS DEVUELTOS
+
+select empleado.nro, empleado.nombre from empleado
+where exists (
+	select trabaja.nro_emp from trabaja
+    join area on trabaja.cod_area = area.cod_area
+    where descripcion like "%s"
+    and empleado.nro = trabaja.nro_emp
+    );
+    
+#Ejercicio 2 - Listar los nombres de los empleados que ganan el sueldo maximo
+#SUBCONSULTA COMO VALOR -- PARA ESTE CASO, ESTO VA A ESTAR DEVOLVIENDO UN VALOR, POR LO CUAL LA COMPARACION TIENE QUE REALIZARSE CON LA PALABRA "ES", POR LO CUAL DEBEMOS --
+#-- ESTAR CONSCIENTES AL UTILIZAR EL "=", ESTE TIPO DE SUBCONSULTA DEBE DEVOLVER UN UNICO REGISTRO O SE ROMPE TODO
+select * from empleado
+where empleado.sueldo = (
+	select max(empleado2.sueldo) from empleado empleado2
+    );
+    
+#Ejercicio 3 - indicar la descripcion de aquellas areas sin empleados
+#USO DEL NOT EXISTS, TENEMOS QUE PEDIRLE "1 REGISTRO QUE NO CUMPLA CON LA CONDICION QUE LE ESTOY BRINDANDO A LA SUBCONSULTA", NUEVAMENTE AL SER UN "EXISTS" HAY QUE LINKEAR --
+#-- LA CONSULTA INTERIOR CON LA CONSULTA EXTERIOR
+select * from area
+where not exists (
+	select 1 from trabaja 
+    where trabaja.cod_area = area.cod_area);
+
+#TAMBIEN PODEMOS REALIZARLO CON UN "NOT IN" QUE AL TRABAJAR COMO CONJUNTO, TEORICAMENTE NO APARECERIA COMO REPETIDO O, SI LO ESTA, EL RESULTADO ES EL MISMO
+select * from area
+where area.cod_area not in (
+	select cod_area
+    from trabaja);
+    
+select * from area left join trabaja on trabaja.cod_area = area.cod_area
+where trabaja.cod_area is null;
+
+#Ejercicio 4 (DIVISION) - Listar el nombre de los empleados que trabajan en todas las areas de la empresa
+#PRIMERA APROXIMACION, UTILIZAR UN COUNT Y AGRUPACIONES
+select empleado.nro, empleado.nombre from empleado join trabaja on empleado.nro = trabaja.nro_emp
+group by empleado.nro, empleado.nombre
+having count(trabaja.nro_emp) = (select count(*) from area);
+
+#SEGUNDA APROXIMACION, USANDO SUBCONSULTAS A TRAVES DEL "NOT EXISTS"
+select * from empleado
+where not exists (
+	select 1 from area
+    where not exists (select 1 from trabaja
+						where trabaja.nro_emp = empleado.nro
+                        and trabaja.cod_area = area.cod_area
+    ));
+    
+select * from area where not exists (select 1 from trabaja where trabaja.cod_area = area.cod_area);
+
+#OPERACIONES DE CONJUNTO 
+
+#UNION: ESTA OPERACION JUSTAMENTE SIMBOLIZA LA UNION ENTRE DOS CONJUNTOS, Y LO QUE HACE ES JUNTAR LOS REGISTROS DE DOS TABLAS, OMITIENDO LA REPETICION DE LOS REGISTROS QUE --
+#-- APARECEN EN AMBAS
+#UNION ALL: TODO CON TODO
+
+select nro, nombre from empleado union all (select * from area);
