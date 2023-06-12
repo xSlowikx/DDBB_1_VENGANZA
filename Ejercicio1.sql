@@ -230,6 +230,35 @@ left join provisto_por on proveedor.cod_prov = provisto_por.cod_prov
 group by proveedor.cod_prov, proveedor.nombre
 having materiales_provistos = 0;
 
+
+#CON ESTA SUBCONSULTA, BASICAMENTE SELECCIONO LOS NOMBRES DE PROVEEDOR TAL QUE NO HAYA UN REGISTRO DE LA TABLA PROVISTO_POR DONDE PUEDA --
+#-- ENCONTRARSE ESTA REFERENCIA
+select 
+    nombre
+from
+    proveedor
+where
+    not exists( select 
+            1
+        from
+            provisto_por
+        where
+            proveedor.cod_prov = provisto_por.cod_prov);
+
+
+#CON ESTA SUBCONSULTA, REALIZO ALGO PARECIDO A LO ANTERIOR NADA MAS QUE ESTA VEZ PREGUNTO POR LOS COD_PROV QUE NO SE ENCUENTREN EN LOS --
+#-- COD_PROV QUE VIENEN EN LA LISTA DE LA SUBCONSULTA
+select 
+    nombre
+from
+    proveedor
+where
+    cod_prov not in (select 
+            cod_prov
+        from
+            provisto_por);
+
+
 #18. Listar los códigos de los materiales que provea el proveedor 10 y no los provea el proveedor 15. 
 
 #PARA ENTENDERME MEJOR, BASICAMENTE PREGUNTO POR LOS COD_MAT DE PROVISTO POR QUE NO SE ENCUENTREN EN LA COLUMNA QUE ME DEVUELVE LA SUBCONSULTA, TRANQUILAMENTE --
@@ -251,21 +280,307 @@ select provisto_por.cod_mat from proveedor
 join provisto_por on proveedor.cod_prov = provisto_por.cod_prov
 where proveedor.cod_prov = 10;
 
+#Esto es realmente innecesario, al no pedirme datos del proveedor esta subconsulta puede ser mas eficiente sin joinear tablas
+select 
+    provisto_por.cod_mat as 'Codigos de materiales'
+from
+    proveedor
+        join
+    provisto_por ON proveedor.cod_prov = provisto_por.cod_prov
+where
+    proveedor.cod_prov = 10
+        and provisto_por.cod_mat not in (select 
+            provisto_por.cod_mat
+        from
+            proveedor
+                join
+            provisto_por ON proveedor.cod_prov = provisto_por.cod_prov
+        where
+            proveedor.cod_prov = 15);
+
+#De esta manera la subconsulta queda mas optimizada, utilizo unicamente la tabla provisto_por
+select 
+    cod_mat as 'Codigos de materiales'
+from
+    provisto_por
+where
+    cod_prov = 10
+        and cod_mat not in (select 
+            pp2.cod_mat
+        from
+            provisto_por pp2
+        where
+            cod_prov = 15);
+            
 #19. Listar número y nombre de almacenes que contienen los artículos de descripción A y los de descripción B (ambos).
 
-select * from almacen
-join contiene on almacen.nro = contiene.nro_almacen
-join articulo on contiene.cod_art = articulo.cod_art
-where articulo.descripcion like "Harina" union (
-	select * from almacen almacen2
-	join contiene contiene2 on almacen2.nro = contiene2.nro_almacen
-	join articulo articulo2 on contiene2.cod_art = articulo2.cod_art
-	where articulo2.descripcion like "Jabon de ropa");
+
+select 
+    *
+from
+    almacen almacen1
+        join
+    contiene ON almacen1.nro = contiene.nro_almacen
+        join
+    articulo ON contiene.cod_art = articulo.cod_art
+where
+    articulo.descripcion like 'Harina' 
+union (select 
+    *
+from
+    almacen almacen2
+        join
+    contiene contiene2 ON almacen2.nro = contiene2.nro_almacen
+        join
+    articulo articulo2 ON contiene2.cod_art = articulo2.cod_art
+where
+    articulo2.descripcion like 'Jabon de ropa'
+        and almacen2.nro = almacen1.nro);
+
+select 
+    *
+from
+    almacen
+        join
+    contiene ON almacen.nro = contiene.nro_almacen
+        join
+    articulo ON contiene.cod_art = articulo.cod_art
+where
+    articulo.cod_art in (1 , 3)
+group by almacen.nro
+having count(contiene.nro_almacen) > 1;
+
+
+select 
+    almacen.nro, almacen.nombre
+from
+    almacen
+where
+    exists( select 
+            1
+        from
+            contiene c
+                join
+            articulo a ON c.cod_art = a.cod_art
+                and a.descripcion like 'Harina')
+        and exists( select 
+            1
+        from
+            contiene c
+                join
+            articulo a ON c.cod_art = a.cod_art
+                and a.descripcion like 'Jabon de ropa');
+
+select 
+    nro, nombre
+from
+    almacen
+where
+    nro in (select 
+            nro
+        from
+            almacen almacen
+                join
+            contiene ON almacen.nro = contiene.nro_almacen
+                join
+            articulo ON contiene.cod_art = articulo.cod_art
+        where
+            articulo.descripcion like 'Harina')
+        and nro in (select 
+            nro
+        from
+            almacen almacen
+                join
+            contiene ON almacen.nro = contiene.nro_almacen
+                join
+            articulo ON contiene.cod_art = articulo.cod_art
+        where
+            articulo.descripcion like 'Jabon de ropa');
 
 #20. Listar la descripción de artículos compuestos por todos los materiales. 
-#21. Hallarloscódigosynombresdelosproveedoresqueproveenalmenosunmaterial              que se usa en algún artículo cuyo precio es mayor a $100. 
+#CLASICA CONSULTA DE DIVISION, HAY QUE APRENDERSELA DE MEMORIA Y UTILIZARLA EN LOS CASOS DONDE SE SOLICITE UNA COMPOSICION COMPLETA N:N --
+# ENTRE UNA TABLA Y OTRA
+select 
+    articulo.descripcion
+from
+    articulo
+where
+    not exists( select 
+            1
+        from
+            material
+        where
+            not exists( select 
+                    1
+                from
+                    compuesto_por
+                where
+                    compuesto_por.cod_art = articulo.cod_art
+                        and compuesto_por.cod_mat = material.cod_mat));
+							
+							
+#21. Hallarloscódigosynombresdelosproveedoresqueproveenalmenosunmaterial              que se usa en algún artículo cuyo precio --
+#-- es mayor a $100. 
+
+select distinct
+    proveedor.cod_prov, proveedor.nombre
+from
+    proveedor
+where
+    exists( select 
+            1
+        from
+            provisto_por
+                join
+            compuesto_por ON provisto_por.cod_mat = compuesto_por.cod_mat
+                join
+            articulo ON compuesto_por.cod_art = articulo.cod_art
+        where
+            articulo.precio = 1400
+                and provisto_por.cod_prov = proveedor.cod_prov);
+
+select 
+    cod_prov
+from
+    proveedor
+where
+    cod_prov in (select 
+            cod_prov
+        from
+            provisto_por
+                join
+            compuesto_por ON provisto_por.cod_mat = compuesto_por.cod_mat
+        where
+            compuesto_por.cod_art = 19)
+order by cod_prov;
+
+
+select distinct
+    proveedor.cod_prov, proveedor.nombre
+from
+    proveedor
+        join
+    provisto_por ON proveedor.cod_prov = provisto_por.cod_prov
+where
+    exists( select 
+            1
+        from
+            compuesto_por
+                join
+            articulo ON compuesto_por.cod_art = articulo.cod_art
+        where
+            articulo.precio = 1400
+                and compuesto_por.cod_mat = provisto_por.cod_mat);
+				
+
+select 
+    articulo.cod_art, max(precio)
+from
+    articulo
+group by articulo.cod_art;
+
+select 
+    cod_prov
+from
+    provisto_por
+        join
+    compuesto_por ON provisto_por.cod_mat = compuesto_por.cod_mat
+where
+    compuesto_por.cod_art = 19
+order by provisto_por.cod_prov;
+
+
 #22. Listar la descripción de los artículos de mayor precio. 
-#23. ListarlosnombresdeproveedoresdeCapitalFederalqueseanúnicos           proveedores de algún material. 
+
+#SUBCONSULTA SIMPLE, NOS GUARDAMOS EL PRECIO MAXIMO Y COMPARAMOS ARTICULO POR ARTICULO EL PRECIO CON EL MAXIMO QUE TRAJIMOS POR SUBCONSULTA
+select 
+    descripcion
+from
+    articulo a
+where
+    precio = (select 
+            max(precio)
+        from
+            articulo);
+
+
+#23. Listar los nombres de proveedores de Capital Federal que sean únicos proveedores de algún material. 
+
+#Esto es con una doble subconsulta utilizando la palabra reservada IN y funciona, elijo los codigos de proveedores que se encuentren en --
+#-- la tabla que devuelve la primer subconsulta, que se queda con los registros donde el cod_mat se encuentre dentro de la tabla que --
+#-- devuelve la segunda subconsulta
+select proveedor.nombre
+from proveedor join ciudad
+on proveedor.cod_ciu = ciudad.cod_ciu
+where ciudad.nombre = "Capital Federal" 
+and proveedor.cod_prov in (
+							select provisto_por.cod_prov from provisto_por
+                            where cod_mat in
+                             (
+								select provisto_por.cod_mat from provisto_por
+								group by provisto_por.cod_mat
+								having count(*) = 1));
+
+#UNA SUBCONSULTA UN POCO MAS SIMPLE, EN ESTA PREGUNTO SI EXISTE UN REGISTRO EN PROVISTO_POR DONDE COINCIDA EL COD_PROV CON --
+#-- EL DE AFUERA DE LA SUBCONSULTA, Y QUE AL AGRUPARLOS POR COD_MAT TENGAN EL CONTADOR DEL GRUPO EN 1
+select proveedor.nombre
+from proveedor join ciudad
+on proveedor.cod_ciu = ciudad.cod_ciu
+where ciudad.nombre = "Capital Federal" 
+and exists (
+						select 1 from provisto_por
+                        where provisto_por.cod_prov = proveedor.cod_prov
+						group by provisto_por.cod_mat
+						having count(*) = 1);
+
+#Proveedores filtrados por alguna ciudad
+select *
+from proveedor join ciudad
+on proveedor.cod_ciu = ciudad.cod_ciu
+order by ciudad.nombre;
+#where ciudad.nombre = "Capital Federal";
+
+#Tabla para revisar los proveedores de los materiales que sean provistos solo por un proveedor, se supone estoy esperando el numero 25
+select cod_mat from provisto_por
+group by cod_mat
+having count(*) = 1;
 #24. Listar los nombres de almacenes que almacenan la mayor cantidad de artículos. 
+
+#AHORA CON ESTE SELECT, UNICAMENTE VAMOS A UTILIZAR EL JOIN PORQUE NECESITAMOS EL NOMBRE DEL ALMACEN (SINO CON LA TABLA CONTIENE SERIA --
+#-- MAS QUE SUFICIENTE), ENTONCES HACEMOS UN HAVING COUNT (*) DE LOS ALMACENES AGRUPADOS POR NRO_ALMACEN Y COMPARAMOS ESTE CONTEO DE --
+#-- REGISTROS DE CADA GRUPO DE ALMACENES CON EL "MAX" QUE OBTENEMOS EN LA CONSULTA DE ABAJO, Y LOS QUE CUMPLAN SE QUEDAN.
+select 
+    almacen.nombre
+from
+    contiene
+        join
+    almacen ON contiene.nro_almacen = almacen.nro
+group by almacen.nro , almacen.nombre
+#ESTE HAVING COUNT HACE UNA COMPARACION CON UNA SUBCONSULTA QUE BASICAMENTE:
+#AHORA ESTA SUBCONSULTA, AGARRA LA TABLA TEMPORAL AGRUPADA QUE RECIBIO ANTERIORMENTE (NRO_ALMACEN / CANTIDAD) Y SE QUEDA CON LA COLUMNA --
+#-- CANTIDAD PARA ELEGIR UN MAXIMO, ENTONCES CON ESTO VAMOS A OBTENER LA CANTIDAD MAXIMA DE ARTICULOS QUE SE TIENE ENTRE TODOS LOS --
+#-- ALMACENES 
+having count(*) = (select 
+        max(subconsulta.cantidad)
+    from
+#ESTA SUBCONSULTA:
+#BASICAMENTE ES UNA TABLA QUE SE DEVUELVE PARA EL FROM QUE ESTA EN DOS FILAS ARRIBA, LO QUE HACE ES, AGRUPANDO POR NRO_ALMACEN EN LA TABLA --
+#-- CONTIENE DEVOLVER LA CANTIDAD DE ARTICULOS QUE APARECEN POR CADA ALMACEN CON EL ALIAS DE "CANTIDAD" PARA LA COLUMNA Y "SUBCONSULTA" PARA --
+#-- LA SUBCONSULTA EN SI MISMO
+        (select 
+            contiene.nro_almacen, count(contiene.cod_art) as cantidad
+        from
+            contiene
+        group by contiene.nro_almacen) as subconsulta);
+
 #25. Listar la ciudades donde existan proveedores que proveen todos los materiales. 
 #26. Listarlosnúmerosdealmacenesquetienentodoslosartículosqueincluyenel             material con código 123. 
+
+
+
+
+
+
+
+
+
