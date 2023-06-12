@@ -306,36 +306,42 @@ from
 where
     cod_prov = 10
         and cod_mat not in (select 
-            pp2.cod_mat
+            cod_mat
         from
-            provisto_por pp2
+            provisto_por
         where
             cod_prov = 15);
             
 #19. Listar número y nombre de almacenes que contienen los artículos de descripción A y los de descripción B (ambos).
 
-
+#NO ES POSIBLE RESOLVER POR UNION YA QUE TERMINA SIENDO MAS UTIL UN "IN"
+#BASICAMENTE LE DIGO, QUE SE QUEDE LOS NUMEROS QUE SE ENCUENTREN EN LA PRIMER TABLA TEMPORAL Y EN LA SEGUNDA, Y EN CADA TABLA DEVUELVO LO QUE QUIERO
 select 
-    *
+    nro, nombre
 from
-    almacen almacen1
-        join
-    contiene ON almacen1.nro = contiene.nro_almacen
-        join
-    articulo ON contiene.cod_art = articulo.cod_art
+    almacen
 where
-    articulo.descripcion like 'Harina' 
-union (select 
-    *
-from
-    almacen almacen2
-        join
-    contiene contiene2 ON almacen2.nro = contiene2.nro_almacen
-        join
-    articulo articulo2 ON contiene2.cod_art = articulo2.cod_art
-where
-    articulo2.descripcion like 'Jabon de ropa'
-        and almacen2.nro = almacen1.nro);
+    nro in (select 
+            nro
+        from
+            almacen almacen
+                join
+            contiene ON almacen.nro = contiene.nro_almacen
+                join
+            articulo ON contiene.cod_art = articulo.cod_art
+        where
+            articulo.descripcion like 'Harina')
+        and nro in (select 
+            nro
+        from
+            almacen almacen
+                join
+            contiene ON almacen.nro = contiene.nro_almacen
+                join
+            articulo ON contiene.cod_art = articulo.cod_art
+        where
+            articulo.descripcion like 'Jabon de ropa');
+
 
 select 
     *
@@ -371,31 +377,6 @@ where
             articulo a ON c.cod_art = a.cod_art
                 and a.descripcion like 'Jabon de ropa');
 
-select 
-    nro, nombre
-from
-    almacen
-where
-    nro in (select 
-            nro
-        from
-            almacen almacen
-                join
-            contiene ON almacen.nro = contiene.nro_almacen
-                join
-            articulo ON contiene.cod_art = articulo.cod_art
-        where
-            articulo.descripcion like 'Harina')
-        and nro in (select 
-            nro
-        from
-            almacen almacen
-                join
-            contiene ON almacen.nro = contiene.nro_almacen
-                join
-            articulo ON contiene.cod_art = articulo.cod_art
-        where
-            articulo.descripcion like 'Jabon de ropa');
 
 #20. Listar la descripción de artículos compuestos por todos los materiales. 
 #CLASICA CONSULTA DE DIVISION, HAY QUE APRENDERSELA DE MEMORIA Y UTILIZARLA EN LOS CASOS DONDE SE SOLICITE UNA COMPOSICION COMPLETA N:N --
@@ -419,7 +400,7 @@ where
                         and compuesto_por.cod_mat = material.cod_mat));
 							
 							
-#21. Hallarloscódigosynombresdelosproveedoresqueproveenalmenosunmaterial              que se usa en algún artículo cuyo precio --
+#21. Hallar los códigos y nombres de los proveedores que proveen al menos un material que se usa en algún artículo cuyo precio --
 #-- es mayor a $100. 
 
 select distinct
@@ -574,7 +555,19 @@ having count(*) = (select
         group by contiene.nro_almacen) as subconsulta);
 
 #25. Listar la ciudades donde existan proveedores que proveen todos los materiales. 
-#26. Listarlosnúmerosdealmacenesquetienentodoslosartículosqueincluyenel             material con código 123. 
+
+select ciudad.nombre
+from proveedor join ciudad
+on proveedor.cod_ciu = ciudad.cod_ciu
+where not exists (
+					select 1 from material
+                    where not exists (
+										select 1 from provisto_por
+                                        where provisto_por.cod_prov = proveedor.cod_prov
+                                        and provisto_por.cod_mat = material.cod_mat));
+										
+
+#26. Listar los números de almacenes que tienen todos los artículos que incluyen el material con código 123. 
 
 
 
