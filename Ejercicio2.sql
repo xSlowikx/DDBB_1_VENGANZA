@@ -73,4 +73,16 @@ where avion.modelo like "%777%"
 group by pasajero.documento;
 
 #7.Listar la cantidad promedio de pasajeros transportados por los aviones de la compañía, por tipo de avión.
+
+select avion.nro_avion, avg(cantpasajeros)
+from avion
+join
+(
+	select vuelo.nro_vuelo, vuelo.nro_avion, count(documento) as cantpasajeros
+    from vuelo
+    join pasajero on pasajero.nro_vuelo = vuelo.nro_vuelo
+    group by vuelo.nro_vuelo, vuelo.nro_avion
+    ) cant on cant.nro_avion = avion.nro_avion
+group by avion.tipo_avion;
+
 #8.Hallar los tipos de avión que no son utilizados en algún vuelo que pase por B. 
