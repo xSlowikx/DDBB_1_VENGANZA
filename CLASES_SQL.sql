@@ -99,6 +99,9 @@ on em1.nro_jefe = em2.nro;
 select empleado.nombre, area.descripcion from
 empleado join trabaja on empleado.nro = trabaja.nro_emp
 join area on trabaja.cod_area = area.cod_area
+
+
+
 where area.descripcion = "Area 1"
 and empleado.sueldo > 5000;
 

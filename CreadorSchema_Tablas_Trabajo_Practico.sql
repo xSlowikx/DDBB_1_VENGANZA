@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS Diagnostico (
 );
 
 CREATE TABLE IF NOT EXISTS Persona (
-    cuil_persona INT UNSIGNED,
+    cuil_persona BIGINT,
     nombre VARCHAR(20) NOT NULL,
     apellido VARCHAR(20) NOT NULL,
     edad TINYINT NOT NULL,
@@ -20,14 +20,14 @@ CREATE TABLE IF NOT EXISTS Persona (
 );
 
 CREATE TABLE IF NOT EXISTS Paciente (
-    cuil_paciente INT UNSIGNED,
+    cuil_paciente BIGINT,
     nro_paciente BIGINT NOT NULL,
     CONSTRAINT pk_paciente PRIMARY KEY (cuil_paciente),
     CONSTRAINT fk_cuil_paciente FOREIGN KEY (cuil_paciente) REFERENCES persona (cuil_persona)
 );
 
 CREATE TABLE IF NOT EXISTS Profesional (
-    cuil_profesional INT UNSIGNED,
+    cuil_profesional BIGINT,
     matricula_provincial VARCHAR(20) NOT NULL,
     matricula_nacional VARCHAR(20) NOT NULL,
     contacto_celular INT NOT NULL,
@@ -52,16 +52,16 @@ create table if not exists Tratamiento (
     id_efecto_principal int not null,
     id_centro_salud int not null,
     id_zona_cuerpo tinyint not null,
-    cuil_profesional int,
-    cuil_paciente int not null,
+    cuil_profesional BIGINT,
+    cuil_paciente BIGINT not null,
     de_tipo varchar (25) not null,
     constraint pk_tratamiento primary key (id_tratamiento),
     constraint fk_id_tipo_tratamiento foreign key (id_tipo_tratamiento) references tipo_tratamiento (id_tipo_tratamiento),
     constraint fk_id_efecto_principal foreign key (id_efecto_principal) references efecto_principal (id_efecto_principal),
     constraint fk_id_centro_salud foreign key (id_centro_salud) references centro_salud (id_centro_salud),
     constraint fk_id_zona_cuerpo foreign key (id_zona_cuerpo) references zona_cuerpo (id_zona_cuerpo),
-    constraint fk_cuil_profesional foreign key (cuil_profesional) references profesional (cuil_profesional),
-    constraint fk_cuil_paciente foreign key (cuil_paciente) references paciente (cuil_paciente)
+    constraint fk_cuil_profesional_tratamiento foreign key (cuil_profesional) references profesional (cuil_profesional),
+    constraint fk_cuil_paciente_tratamiento foreign key (cuil_paciente) references paciente (cuil_paciente)
 );
 
 create table if not exists Practica_diagnostica (
@@ -81,17 +81,20 @@ create table if not exists Practica_quirurgica (
 create table if not exists Compuesto_farmacologico (
 	id_tratamiento int,
     id_tipo_compuesto int not null,
-    id_fabricante int not null,
+    id_fabricante smallint not null,
     id_partida int not null,
+    nro_lote int not null,
     constraint pk_compuesto_farmacologico primary key (id_tratamiento),
+    constraint fk_id_tratamiento_compuesto foreign key (id_tratamiento) references tratamiento (id_tratamiento),
     constraint fk_id_tipo_compuesto foreign key (id_tipo_compuesto) references tipo_compuesto(id_tipo_compuesto),
-    constraint fk_id foreign key (id_fabricante) references fabricante (id_fabricante),
-    constraint fk_id foreign key (id_partida) references partida (id_partida)
+    constraint fk_id_fabricante foreign key (id_fabricante) references fabricante (id_fabricante),
+    constraint fk_id_partida_compuesto foreign key (id_partida) references lote (id_partida),
+    constraint fk_nro_lote_compuesto foreign key (nro_lote) references lote (nro_lote)
 );
 
 -- TABLAS DE RELACIONES N:N --
 create table if not exists Antecedente (
-	cuil_persona int unsigned,
+	cuil_persona BIGINT,
     cie10 varchar (5),
     fecha date,
     constraint pk_antecedente primary key (cuil_persona, cie10, fecha),
@@ -102,7 +105,7 @@ create table if not exists Especializacion (
 	cuil_profesional int unsigned,
     id_especialidad int,
     constraint pk_especializacion primary key (cuil_profesional, id_especialidad),
-    constraint fk_cuil_profesional foreign key (cuil_profesional) references profesional (cuil_profesional),
+    constraint fk_cuil_profesional_especializacion foreign key (cuil_profesional) references profesional (cuil_profesional),
     constraint fk_id_especialidad foreign key (id_especialidad) references especialidad (id_especialidad)
 );
 
@@ -111,7 +114,7 @@ create table if not exists Produce (
     cod_efecto_adverso int,
     fecha date,
     constraint pk_produce primary key (id_tratamiento, cod_efecto_adverso, fecha),
-    constraint fk_id_tratamiento foreign key (id_tratamiento) references tratamiento (id_tratamiento),
+    constraint fk_id_tratamiento_produce foreign key (id_tratamiento) references tratamiento (id_tratamiento),
     constraint fk_cod_efecto_adverso foreign key (cod_efecto_adverso) references efecto_adverso (cod_efecto_adverso)
 );
 
@@ -119,15 +122,15 @@ create table if not exists Se_espera (
 	id_tratamiento int,
     id_beneficio int,
     constraint pk_se_espera primary key (id_tratamiento, id_beneficio),
-    constraint fk_id_tratamiento1 foreign key (id_tratamiento) references tratamiento (id_tratamiento),
-    constraint fk_id_beneficio foreign key (id_beneficio) references beneficio (id_beneficio)
+    constraint fk_id_tratamiento_se_espera foreign key (id_tratamiento) references tratamiento (id_tratamiento),
+    constraint fk_id_beneficio_se_espera foreign key (id_beneficio) references beneficio (id_beneficio)
 );
 
 create table if not exists Se_recomienda (
 	id_tratamiento int,
     id_contraindicacion tinyint,
     constraint pk_se_recomienda primary key (id_tratamiento, id_contraindicacion),
-    constraint fk_id_tratamiento2 foreign key (id_tratamiento) references tratamiento (id_tratamiento),
+    constraint fk_id_tratamiento_se_recomienda foreign key (id_tratamiento) references tratamiento (id_tratamiento),
     constraint fk_id_contraindicacion foreign key (id_contraindicacion) references contraindicacion (id_contraindicacion)
 );
 
@@ -238,7 +241,7 @@ create table if not exists Partida (
 
 create table if not exists Lote (
 	id_partida int,
-	nro_lote int auto_increment,
+	nro_lote int,
     vencimiento date not null,
     constraint pk_lote primary key (id_partida, nro_lote),
     constraint fk_id_partida foreign key (id_partida) references partida (id_partida)
@@ -254,6 +257,6 @@ create table if not exists Farmaco (
 	cod_barra_farmaco int auto_increment,
 	nombre varchar (50) not null,
 	id_origen tinyint not null,
-    constraint pk_farmaco primary key (cod_barra),
+    constraint pk_farmaco primary key (cod_barra_farmaco),
     constraint fk_id_origen foreign key (id_origen) references origen (id_origen)
 );
