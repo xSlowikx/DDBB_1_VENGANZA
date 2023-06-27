@@ -10,6 +10,8 @@ insert into tipo_compuesto (descripcion) values
 ("Suero"),
 ("Adyuvante");
 
+insert into tipo_compuesto values ("Pepas");
+
 -- Insertar tipos de procedimientos --
 insert into tipo_procedimiento (descripcion) values 
 ("Superficial"),

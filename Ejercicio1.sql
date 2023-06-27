@@ -570,10 +570,12 @@ where not exists (
 #26. Listar los números de almacenes que tienen todos los artículos que incluyen el material con código 123. 
 
 
-
-
-
-
-
-
-
+select nro from almacen
+where not exists( select 1 from articulo
+					join compuesto_por on articulo.cod_art = compuesto_por.cod_art
+                    join material on compuesto_por.cod_mat = material.cod_mat
+                    where material.cod_mat = 123
+					and not exists (
+										select 1 from contiene
+                                        where almacen.nro = contiene.nro_almacen
+                                        and articulo.cod_art = contiene.cod_art));

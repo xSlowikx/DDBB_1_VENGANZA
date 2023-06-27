@@ -85,4 +85,18 @@ join
     ) cant on cant.nro_avion = avion.nro_avion
 group by avion.tipo_avion;
 
+select avion.tipo_avion, avg(pasajeros_xvuelo.cantidad)
+from (select vuelo.nro_avion as nroavion, count(documento) as cantidad
+	from pasajero
+    join vuelo on pasajero.nro_vuelo = vuelo.nro_vuelo
+	group by vuelo.nro_vuelo, vuelo.nro_avion) as pasajeros_xvuelo
+join avion on pasajeros_xvuelo.nroavion = avion.nro_avion
+group by avion.tipo_avion;
+
+
 #8.Hallar los tipos de avión que no son utilizados en algún vuelo que pase por B. 
+
+select distinct tipo_avion from avion
+where not exists (select 1 from vuelo
+					where desde = "B" or hasta = "B"
+                    and vuelo.nro_avion = avion.nro_avion);
