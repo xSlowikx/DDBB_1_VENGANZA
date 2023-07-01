@@ -1,6 +1,6 @@
 CREATE DATABASE  IF NOT EXISTS `trabajo_practico` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `trabajo_practico`;
--- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
 --
 -- Host: localhost    Database: trabajo_practico
 -- ------------------------------------------------------
@@ -26,12 +26,12 @@ DROP TABLE IF EXISTS `beneficio`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `beneficio` (
   `id_beneficio` int NOT NULL AUTO_INCREMENT,
-  `descripción` varchar(50) NOT NULL,
+  `descripcion` varchar(100) NOT NULL,
   `id_categoria` tinyint NOT NULL,
   PRIMARY KEY (`id_beneficio`),
   KEY `fk_id_categoria` (`id_categoria`),
   CONSTRAINT `fk_id_categoria` FOREIGN KEY (`id_categoria`) REFERENCES `categoria` (`id_categoria`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,6 +40,7 @@ CREATE TABLE `beneficio` (
 
 LOCK TABLES `beneficio` WRITE;
 /*!40000 ALTER TABLE `beneficio` DISABLE KEYS */;
+INSERT INTO `beneficio` VALUES (53,'Reducción del riesgo de enfermedades cardíacas',5),(54,'Mejora de la calidad del sueño',4),(55,'Aumento de la resistencia física',3),(56,'Reducción del estrés y la ansiedad',4),(57,'Prevención de enfermedades respiratorias',2),(58,'Mejora de la salud mental',4),(59,'Aumento de la flexibilidad y la movilidad',3),(60,'Reducción del riesgo de diabetes tipo 2',5),(61,'Fortalecimiento del sistema inmunológico',4),(62,'Mejora de la función cerebral',4),(63,'Reducción de los síntomas de la depresión',4),(64,'Aumento de la masa muscular',3),(65,'Prevención de la osteoporosis',3),(66,'Reducción del riesgo de cáncer',5),(67,'Aumento de la energía y vitalidad',3),(68,'Mejora de la salud cardiovascular',5),(69,'Reducción de la presión arterial',4),(70,'Promoción de un envejecimiento saludable',4),(71,'Mejora de la digestión',3),(72,'Reducción del riesgo de obesidad',5),(73,'Aumento de la autoestima y la confianza',4),(74,'Mejora de la función pulmonar',3),(75,'Reducción del dolor crónico',4),(76,'Prevención de lesiones',2),(77,'Mejora de la postura y alineación corporal',3),(78,'Reducción del riesgo de accidentes cerebrovasculares',5);
 /*!40000 ALTER TABLE `beneficio` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-30 19:15:49
+-- Dump completed on 2023-07-01 13:54:09

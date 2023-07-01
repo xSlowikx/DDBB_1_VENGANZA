@@ -1,6 +1,6 @@
 CREATE DATABASE  IF NOT EXISTS `trabajo_practico` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `trabajo_practico`;
--- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
 --
 -- Host: localhost    Database: trabajo_practico
 -- ------------------------------------------------------
@@ -40,6 +40,7 @@ CREATE TABLE `efecto_adverso` (
 
 LOCK TABLES `efecto_adverso` WRITE;
 /*!40000 ALTER TABLE `efecto_adverso` DISABLE KEYS */;
+INSERT INTO `efecto_adverso` VALUES (102345,'Hipotensión',3),(109234,'Lesión de nervios',4),(123456,'Náuseas',2),(147852,'Vomitos de sangre',4),(210345,'Desmayo',3),(213456,'Insuficiencia renal',5),(234567,'Infección de herida',3),(258741,'Arritmia aguda',5),(321456,'Inflamación',2),(321486,'Exposicion de intestino delgado',3),(321654,'Somnolencia',2),(324567,'Infección del tracto urinario',3),(334568,'Cefalea cronica',3),(345678,'Hemorragia',4),(432567,'Problemas de cicatrización',3),(435678,'Trombosis venosa profunda',4),(456789,'Dolor crónico',3),(543678,'Dehiscencia de herida',4),(546789,'Arritmia cardíaca',4),(567890,'Mareos',1),(654789,'Infección respiratoria',3),(654987,'Desgarro de la pared intestinal',4),(657890,'Neumonía',4),(678901,'Confusión',2),(765890,'Hematoma en el sitio quirúrgico',3),(768901,'Hematomas',2),(789012,'Fiebre',2),(879012,'Dolor de cabeza',1),(890123,'Dificultad respiratoria',4),(901234,'Dolor abdominal',3),(980123,'Vómitos',2);
 /*!40000 ALTER TABLE `efecto_adverso` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-30 19:15:48
+-- Dump completed on 2023-07-01 13:54:08

@@ -1,6 +1,6 @@
 CREATE DATABASE  IF NOT EXISTS `trabajo_practico` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `trabajo_practico`;
--- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
 --
 -- Host: localhost    Database: trabajo_practico
 -- ------------------------------------------------------
@@ -31,7 +31,7 @@ CREATE TABLE `farmaco` (
   PRIMARY KEY (`cod_barra_farmaco`),
   KEY `fk_id_origen` (`id_origen`),
   CONSTRAINT `fk_id_origen` FOREIGN KEY (`id_origen`) REFERENCES `origen` (`id_origen`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32164 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,6 +40,7 @@ CREATE TABLE `farmaco` (
 
 LOCK TABLES `farmaco` WRITE;
 /*!40000 ALTER TABLE `farmaco` DISABLE KEYS */;
+INSERT INTO `farmaco` VALUES (32154,'Morfina',1),(32155,'Menta',1),(32156,'Pilocarpus',1),(32157,'Taxus',1),(32158,'Sauce',1),(32159,'Aspirina',2),(32160,'Insulina',2),(32161,'Omeprazol',2),(32162,'Ibuprofeno',2),(32163,'Diclofenac',2);
 /*!40000 ALTER TABLE `farmaco` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-30 19:15:49
+-- Dump completed on 2023-07-01 13:54:07

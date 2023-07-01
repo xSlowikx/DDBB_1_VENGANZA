@@ -5,7 +5,7 @@ use trabajo_practico;
 -- TABLAS PRINCIPALES --
 CREATE TABLE IF NOT EXISTS Diagnostico (
     cie10 VARCHAR(5),
-    descripción VARCHAR(100) NOT NULL,
+    descripcion VARCHAR(100) NOT NULL,
     CONSTRAINT pk_diagnostico PRIMARY KEY (cie10)
 );
 
@@ -82,7 +82,7 @@ create table if not exists Efecto_adverso (
 
 create table if not exists Tratamiento (
 	id_tratamiento int auto_increment,
-	nomenclatura varchar (50),
+	id_nomenclatura decimal(4,2) not null,
     id_tipo_tratamiento tinyint not null,
     id_efecto_principal int not null,
     id_centro_salud int not null,
@@ -91,6 +91,7 @@ create table if not exists Tratamiento (
     cuil_paciente BIGINT not null,
     de_tipo varchar (25) not null,
     constraint pk_tratamiento primary key (id_tratamiento),
+    constraint fk_id_nomenclatura foreign key (id_nomenclatura) references nomenclatura (id_nomenclatura),
     constraint fk_id_tipo_tratamiento foreign key (id_tipo_tratamiento) references tipo_tratamiento (id_tipo_tratamiento),
     constraint fk_id_efecto_principal foreign key (id_efecto_principal) references efecto_principal (id_efecto_principal),
     constraint fk_id_centro_salud foreign key (id_centro_salud) references centro_salud (id_centro_salud),
@@ -161,11 +162,11 @@ create table if not exists Se_espera (
     constraint fk_id_beneficio_se_espera foreign key (id_beneficio) references beneficio (id_beneficio)
 );
 
-create table if not exists Se_recomienda (
+create table if not exists no_usar_si (
 	id_tratamiento int,
     id_contraindicacion tinyint,
-    constraint pk_se_recomienda primary key (id_tratamiento, id_contraindicacion),
-    constraint fk_id_tratamiento_se_recomienda foreign key (id_tratamiento) references tratamiento (id_tratamiento),
+    constraint pk_no_usar_si primary key (id_tratamiento, id_contraindicacion),
+    constraint fk_id_tratamiento_no_usar_si foreign key (id_tratamiento) references tratamiento (id_tratamiento),
     constraint fk_id_contraindicacion foreign key (id_contraindicacion) references contraindicacion (id_contraindicacion)
 );
 
@@ -182,11 +183,17 @@ create table if not exists Composicion (
 -- NORMALIZACIONES PROFESIONAL --
 create table if not exists Especialidad (
 	id_especialidad int auto_increment,
-    descripción varchar (50) not null,
+    descripcion varchar (50) not null,
     constraint pk_especialidad primary key (id_especialidad)
     );
     
 -- NORMALIZACIONES TRATAMIENTO --
+create table if not exists Nomenclatura (
+	id_nomenclatura decimal(4,2),
+    nomenclatura varchar (100) not null,
+    constraint pk_nomenclatura primary key (id_nomenclatura)
+);
+
 create table if not exists Categoria (
 	id_categoria tinyint auto_increment,
     nivel varchar (50) not null,
@@ -195,7 +202,7 @@ create table if not exists Categoria (
 
 create table if not exists Beneficio (
 	id_beneficio int auto_increment,
-    descripción varchar (50) not null,
+    descripcion varchar (100) not null,
     id_categoria tinyint not null,
     constraint pk_beneficio primary key (id_beneficio),
     constraint fk_id_categoria foreign key (id_categoria) references categoria (id_categoria)
@@ -203,13 +210,13 @@ create table if not exists Beneficio (
 
 create table if not exists Efecto_principal (
 	id_efecto_principal int auto_increment,
-    descripción varchar (50) not null,
+    descripcion varchar (50) not null,
     constraint pk_efecto_principal primary key (id_efecto_principal)
 );
 
 create table if not exists Contraindicacion (
 	id_contraindicacion tinyint auto_increment,
-    nombre varchar (50) not null,
+    nombre varchar (100) not null,
     constraint pk_contraindicacion primary key (id_contraindicacion)
 );
 
@@ -221,7 +228,7 @@ create table if not exists Centro_salud (
 
 create table if not exists Zona_cuerpo (
 	id_zona_cuerpo tinyint auto_increment,
-    descripción varchar (50) not null,
+    descripcion varchar (50) not null,
     constraint pk_zona_cuerpo primary key (id_zona_cuerpo)
     );
 
@@ -274,6 +281,8 @@ create table if not exists Partida (
     constraint pk_partida primary key (id_partida)
 );
 
+alter table partida auto_increment = 1000;
+
 create table if not exists Lote (
 	id_partida int,
 	nro_lote int,
@@ -295,3 +304,5 @@ create table if not exists Farmaco (
     constraint pk_farmaco primary key (cod_barra_farmaco),
     constraint fk_id_origen foreign key (id_origen) references origen (id_origen)
 );
+
+alter table farmaco auto_increment = 32154;

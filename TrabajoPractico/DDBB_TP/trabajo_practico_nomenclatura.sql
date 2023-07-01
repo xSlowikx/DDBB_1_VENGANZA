@@ -18,27 +18,26 @@ USE `trabajo_practico`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `origen`
+-- Table structure for table `nomenclatura`
 --
 
-DROP TABLE IF EXISTS `origen`;
+DROP TABLE IF EXISTS `nomenclatura`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `origen` (
-  `id_origen` tinyint NOT NULL AUTO_INCREMENT,
-  `descripcion` varchar(50) NOT NULL,
-  PRIMARY KEY (`id_origen`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `nomenclatura` (
+  `id_nomenclatura` decimal(4,2) NOT NULL,
+  `nomenclatura` varchar(100) NOT NULL,
+  PRIMARY KEY (`id_nomenclatura`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `origen`
+-- Dumping data for table `nomenclatura`
 --
 
-LOCK TABLES `origen` WRITE;
-/*!40000 ALTER TABLE `origen` DISABLE KEYS */;
-INSERT INTO `origen` VALUES (1,'Natural'),(2,'Artificial');
-/*!40000 ALTER TABLE `origen` ENABLE KEYS */;
+LOCK TABLES `nomenclatura` WRITE;
+/*!40000 ALTER TABLE `nomenclatura` DISABLE KEYS */;
+/*!40000 ALTER TABLE `nomenclatura` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -50,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-01 13:54:07
+-- Dump completed on 2023-07-01 13:54:08

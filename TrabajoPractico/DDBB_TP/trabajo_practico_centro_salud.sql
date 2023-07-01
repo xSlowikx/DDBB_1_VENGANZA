@@ -1,6 +1,6 @@
 CREATE DATABASE  IF NOT EXISTS `trabajo_practico` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `trabajo_practico`;
--- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
 --
 -- Host: localhost    Database: trabajo_practico
 -- ------------------------------------------------------
@@ -28,7 +28,7 @@ CREATE TABLE `centro_salud` (
   `id_centro_salud` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) NOT NULL,
   PRIMARY KEY (`id_centro_salud`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,6 +37,7 @@ CREATE TABLE `centro_salud` (
 
 LOCK TABLES `centro_salud` WRITE;
 /*!40000 ALTER TABLE `centro_salud` DISABLE KEYS */;
+INSERT INTO `centro_salud` VALUES (1,'Clinique La Prairie'),(2,'Mayo Clinic'),(3,'Johns Hopkins Hospital'),(4,'Cleveland Clinic'),(5,'Massachusetts General Hospital'),(6,'Charité - Universitätsmedizin Berlin'),(7,'University of Texas MD Anderson Cancer Center'),(8,'Assistance Publique – Hôpitaux de Paris'),(9,'Toronto General Hospital'),(10,'Mount Sinai Hospital'),(11,'Stanford Health Care'),(12,'Karolinska University Hospital'),(13,'Singapore General Hospital'),(14,'Seoul National University Hospital'),(15,'Hospital Italiano de Buenos Aires'),(16,'Clinica Universidad de Navarra'),(17,'King\"s College Hospital\''),(18,'Hospital Israelita Albert Einstein'),(19,'Mayo Clinic (Rochester)'),(20,'NewYork-Presbyterian Hospital');
 /*!40000 ALTER TABLE `centro_salud` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -49,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-30 19:15:50
+-- Dump completed on 2023-07-01 13:54:08

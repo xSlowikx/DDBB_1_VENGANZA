@@ -1,6 +1,6 @@
 CREATE DATABASE  IF NOT EXISTS `trabajo_practico` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `trabajo_practico`;
--- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
 --
 -- Host: localhost    Database: trabajo_practico
 -- ------------------------------------------------------
@@ -31,7 +31,7 @@ CREATE TABLE `fabricante` (
   PRIMARY KEY (`id_fabricante`),
   KEY `fk_pais_origen` (`pais_origen`),
   CONSTRAINT `fk_pais_origen` FOREIGN KEY (`pais_origen`) REFERENCES `pais_origen` (`id_pais`)
-) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1005 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,6 +40,7 @@ CREATE TABLE `fabricante` (
 
 LOCK TABLES `fabricante` WRITE;
 /*!40000 ALTER TABLE `fabricante` DISABLE KEYS */;
+INSERT INTO `fabricante` VALUES (1000,'Pepsico',3),(1001,'Santaclara SA',4),(1002,'Santa Monica Studios',8),(1003,'Dreamworks Interactive',4),(1004,'Svalanksa Kvaarsa',10);
 /*!40000 ALTER TABLE `fabricante` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-30 19:15:50
+-- Dump completed on 2023-07-01 13:54:08

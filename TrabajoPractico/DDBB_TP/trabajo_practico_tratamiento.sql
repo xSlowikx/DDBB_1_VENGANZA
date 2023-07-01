@@ -1,6 +1,6 @@
 CREATE DATABASE  IF NOT EXISTS `trabajo_practico` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `trabajo_practico`;
--- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
 --
 -- Host: localhost    Database: trabajo_practico
 -- ------------------------------------------------------
@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS `tratamiento`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tratamiento` (
   `id_tratamiento` int NOT NULL AUTO_INCREMENT,
-  `nomenclatura` varchar(50) DEFAULT NULL,
+  `id_nomenclatura` decimal(4,2) NOT NULL,
   `id_tipo_tratamiento` tinyint NOT NULL,
   `id_efecto_principal` int NOT NULL,
   `id_centro_salud` int NOT NULL,
@@ -41,10 +41,12 @@ CREATE TABLE `tratamiento` (
   KEY `fk_id_zona_cuerpo` (`id_zona_cuerpo`),
   KEY `fk_cuil_profesional_tratamiento_idx` (`cuil_profesional`),
   KEY `fk_cuil_paciente_tratamiento_idx` (`cuil_paciente`),
+  KEY `fk_id_nomenclatura_idx` (`id_nomenclatura`),
   CONSTRAINT `fk_cuil_paciente_tratamiento` FOREIGN KEY (`cuil_paciente`) REFERENCES `paciente` (`cuil_paciente`),
   CONSTRAINT `fk_cuil_profesional_tratamiento` FOREIGN KEY (`cuil_profesional`) REFERENCES `profesional` (`cuil_profesional`),
   CONSTRAINT `fk_id_centro_salud` FOREIGN KEY (`id_centro_salud`) REFERENCES `centro_salud` (`id_centro_salud`),
   CONSTRAINT `fk_id_efecto_principal` FOREIGN KEY (`id_efecto_principal`) REFERENCES `efecto_principal` (`id_efecto_principal`),
+  CONSTRAINT `fk_id_nomenclatura` FOREIGN KEY (`id_nomenclatura`) REFERENCES `nomenclatura` (`id_nomenclatura`),
   CONSTRAINT `fk_id_tipo_tratamiento` FOREIGN KEY (`id_tipo_tratamiento`) REFERENCES `tipo_tratamiento` (`id_tipo_tratamiento`),
   CONSTRAINT `fk_id_zona_cuerpo` FOREIGN KEY (`id_zona_cuerpo`) REFERENCES `zona_cuerpo` (`id_zona_cuerpo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -68,4 +70,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-30 19:15:50
+-- Dump completed on 2023-07-01 13:54:07

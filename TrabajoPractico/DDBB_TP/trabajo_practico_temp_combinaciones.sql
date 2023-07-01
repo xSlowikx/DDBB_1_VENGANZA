@@ -1,6 +1,6 @@
 CREATE DATABASE  IF NOT EXISTS `trabajo_practico` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `trabajo_practico`;
--- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
 --
 -- Host: localhost    Database: trabajo_practico
 -- ------------------------------------------------------
@@ -18,29 +18,24 @@ USE `trabajo_practico`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `se_recomienda`
+-- Table structure for table `temp_combinaciones`
 --
 
-DROP TABLE IF EXISTS `se_recomienda`;
+DROP TABLE IF EXISTS `temp_combinaciones`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `se_recomienda` (
-  `id_tratamiento` int NOT NULL,
-  `id_contraindicacion` tinyint NOT NULL,
-  PRIMARY KEY (`id_tratamiento`,`id_contraindicacion`),
-  KEY `fk_id_contraindicacion` (`id_contraindicacion`),
-  CONSTRAINT `fk_id_contraindicacion` FOREIGN KEY (`id_contraindicacion`) REFERENCES `contraindicacion` (`id_contraindicacion`),
-  CONSTRAINT `fk_id_tratamiento_se_recomienda` FOREIGN KEY (`id_tratamiento`) REFERENCES `tratamiento` (`id_tratamiento`)
+CREATE TABLE `temp_combinaciones` (
+  `combinacion` bigint DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `se_recomienda`
+-- Dumping data for table `temp_combinaciones`
 --
 
-LOCK TABLES `se_recomienda` WRITE;
-/*!40000 ALTER TABLE `se_recomienda` DISABLE KEYS */;
-/*!40000 ALTER TABLE `se_recomienda` ENABLE KEYS */;
+LOCK TABLES `temp_combinaciones` WRITE;
+/*!40000 ALTER TABLE `temp_combinaciones` DISABLE KEYS */;
+/*!40000 ALTER TABLE `temp_combinaciones` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +47,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-30 19:15:48
+-- Dump completed on 2023-07-01 13:54:08
