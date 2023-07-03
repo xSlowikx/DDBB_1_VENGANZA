@@ -1,5 +1,5 @@
 -- -----------------------------------------------
--- DATOS PARA CREAR UN COMPUESTO FARMACOLOGICO --
+-- DATOS PARA CREAR UN Compuesto Farmacologico --
 
 -- Insertar tipos de compuestos farmacologicos --
 insert into tipo_compuesto (descripcion) values
@@ -128,6 +128,21 @@ values
     (543678, 'Dehiscencia de herida', 4),
     (654789, 'Infección respiratoria', 3),
     (765890, 'Hematoma en el sitio quirúrgico', 3);
+    
+-- Insertar mas efectos adversos
+
+
+INSERT INTO Efecto_adverso (cod_efecto_adverso, nombre, nivel_gravedad)values 
+(736374,'Nauseas y vomitos',3),
+(737464,'Diarrea o estreñimiento',4),
+(192837,'Problemas de riñonn o higado',4),
+(283647,'Problemas de vision o audicion',3),
+(220184,'Alergias o reacciones cutaneas',5),
+(118363,'Dolor de cabeza',2),
+(582674,'Perdida de apetito o aumento de peso',5),
+(745637,'Somnolencia o insomnio',5),
+(473636,'Mareos y vertigo',4),
+(346253,'Cambios en el estado de animo o depresion',4);
     
 -- Insertar categorias de beneficio --
 insert into categoria
@@ -619,3 +634,163 @@ SET cuil_madre = (
 -- aca para evitar que siempre me asigne el mismo cuil_madre fui rotando la condicion del where con distintos segmentos de edad
 WHERE edad between 0 and 3
 limit 25;
+
+-- Insertar nomenclaturas
+INSERT INTO nomenclatura (id_nomenclatura, nomenclatura) VALUES
+    (1.01, 'Vacuna contra la influenza'),
+    (2.05, 'Vacuna contra el sarampión'),
+    (3.03, 'Vacuna contra la varicela'),
+    (4.02, 'Vacuna contra la hepatitis B'),
+    (5.01, 'Vacuna contra el tétanos'),
+    (6.04, 'Vacuna contra la fiebre amarilla'),
+    (7.01, 'Vacuna contra la poliomielitis'),
+    (8.02, 'Vacuna contra la rubéola'),
+    (9.01, 'Vacuna contra la meningitis'),
+    (10.03, 'Vacuna contra la tos ferina');
+
+-- Insertar tratamientos de tipo Compuesto Farmacologico y de tipo tratamiento 6 (curativo - invasivo)
+
+INSERT INTO Tratamiento (id_nomenclatura, id_tipo_tratamiento, id_efecto_principal, id_centro_salud, id_zona_cuerpo, cuil_profesional, cuil_paciente, de_tipo)values
+((select id_nomenclatura from nomenclatura order by rand() limit 1), 6, 4, 10, 6, (select cuil_profesional from profesional order by rand() limit 1), (select cuil_paciente from paciente order by rand() limit 1), 'Compuesto Farmacologico'),
+((select id_nomenclatura from nomenclatura order by rand() limit 1), 6, 23, 7, 15, (select cuil_profesional from profesional order by rand() limit 1), (select cuil_paciente from paciente order by rand() limit 1),'Compuesto Farmacologico'),
+((select id_nomenclatura from nomenclatura order by rand() limit 1), 6, 19, 1, 2, (select cuil_profesional from profesional order by rand() limit 1), (select cuil_paciente from paciente order by rand() limit 1), 'Compuesto Farmacologico'),
+((select id_nomenclatura from nomenclatura order by rand() limit 1), 6, 7, 16, 7, (select cuil_profesional from profesional order by rand() limit 1), (select cuil_paciente from paciente order by rand() limit 1), 'Compuesto Farmacologico'),
+((select id_nomenclatura from nomenclatura order by rand() limit 1), 6, 5, 10, 3, (select cuil_profesional from profesional order by rand() limit 1), (select cuil_paciente from paciente order by rand() limit 1), 'Compuesto Farmacologico'),
+((select id_nomenclatura from nomenclatura order by rand() limit 1), 6, 12, 19, 9, (select cuil_profesional from profesional order by rand() limit 1), (select cuil_paciente from paciente order by rand() limit 1), 'Compuesto Farmacologico'),
+((select id_nomenclatura from nomenclatura order by rand() limit 1), 6, 1, 9, 6, (select cuil_profesional from profesional order by rand() limit 1), (select cuil_paciente from paciente order by rand() limit 1), 'Compuesto Farmacologico'),
+((select id_nomenclatura from nomenclatura order by rand() limit 1), 6, 2, 20, 10, (select cuil_profesional from profesional order by rand() limit 1), (select cuil_paciente from paciente order by rand() limit 1), 'Compuesto Farmacologico'),
+((select id_nomenclatura from nomenclatura order by rand() limit 1), 6, 24, 10, 12, (select cuil_profesional from profesional order by rand() limit 1), (select cuil_paciente from paciente order by rand() limit 1), 'Compuesto Farmacologico'),
+((select id_nomenclatura from nomenclatura order by rand() limit 1), 6, 15, 17, 4, (select cuil_profesional from profesional order by rand() limit 1), (select cuil_paciente from paciente order by rand() limit 1), 'Compuesto Farmacologico');
+
+-- Insertar compuestos farmacologicos para los tratamientos realizados (son de tipo vacuna, pero lo demas es aleatorio)
+
+insert into compuesto_farmacologico
+	(id_tratamiento, id_tipo_compuesto, id_fabricante, id_partida, nro_lote)
+values
+	(
+    (select id_tratamiento from tratamiento where de_tipo = "Compuesto Farmacologico" order by rand() limit 1),
+    2,
+    (select id_fabricante from fabricante order by rand() limit 1),
+    (select id_partida from lote order by rand() limit 1),
+    (select nro_lote from lote order by rand() limit 1)
+    );
+	
+-- Insertar efectos adversos para vacunas
+
+insert into produce
+	(id_tratamiento, cod_efecto_adverso, fecha)
+values
+	((select id_tratamiento from compuesto_farmacologico order by rand() limit 1),
+    (select cod_efecto_adverso from efecto_adverso order by rand() limit 1),
+    DATE(FROM_UNIXTIME(UNIX_TIMESTAMP('2021-01-01') + 
+       FLOOR(RAND() * (UNIX_TIMESTAMP('2023-12-31') - UNIX_TIMESTAMP('2021-01-01') + 1)))));
+       
+-- Corroborar cantidades
+
+select id_tratamiento, count(*)
+from produce join efecto_adverso on produce.cod_efecto_adverso = efecto_adverso.cod_efecto_adverso
+group by id_tratamiento;
+
+
+-- Insertando recien nacidos
+
+INSERT INTO Persona (cuil_persona, nombre, apellido, edad, cuil_madre,id_rango_etario) VALUES
+((SELECT FLOOR(RAND() * (99999999999 - 10000000000 + 1)) + 10000000000), 'Mario', 'Lopez', 0, 201239786,1),
+((SELECT FLOOR(RAND() * (99999999999 - 10000000000 + 1)) + 10000000000), 'Mario', 'Vargas', 0, 201239786,1),
+((SELECT FLOOR(RAND() * (99999999999 - 10000000000 + 1)) + 10000000000), 'Hector', 'Lopez', 0, 201239786,1),
+((SELECT FLOOR(RAND() * (99999999999 - 10000000000 + 1)) + 10000000000), 'Esteban', 'Gomez', 0, 2012349788,1),
+((SELECT FLOOR(RAND() * (99999999999 - 10000000000 + 1)) + 10000000000), 'Cristian', 'Avarez', 0,2012349788,1),
+((SELECT FLOOR(RAND() * (99999999999 - 10000000000 + 1)) + 10000000000), 'Luis', 'Romero', 0, 2012349788,1),
+((SELECT FLOOR(RAND() * (99999999999 - 10000000000 + 1)) + 10000000000), 'Raul', 'Navarro', 0, 20123446781,1),
+((SELECT FLOOR(RAND() * (99999999999 - 10000000000 + 1)) + 10000000000), 'Estefania', 'Diaz', 0, 20123446781,1),
+((SELECT FLOOR(RAND() * (99999999999 - 10000000000 + 1)) + 10000000000), 'Pedro', 'Fernandez', 0, 20123446781,1),
+((SELECT FLOOR(RAND() * (99999999999 - 10000000000 + 1)) + 10000000000), 'Ana', 'Rodriguez', 0, 20123455876,1);
+
+-- Insertar recien nacidos como pacientes
+INSERT INTO paciente (cuil_paciente, nro_paciente)
+VALUES ((SELECT cuil_persona FROM persona where edad = 0 ORDER BY RAND() LIMIT 1), 
+        (SELECT FLOOR(RAND() * (99999999 - 10000000 + 1)) + 10000000));
+
+-- Tratamientos para recien nacidos
+
+INSERT INTO Tratamiento (id_nomenclatura, id_tipo_tratamiento, id_efecto_principal, id_centro_salud, id_zona_cuerpo, cuil_profesional, cuil_paciente, de_tipo)values
+((select id_nomenclatura from nomenclatura order by rand() limit 1), -- una nomenclatura aleatoria
+2, -- diagnostico invasivo
+(select id_efecto_principal from efecto_principal order by rand() limit 1), -- un efecto aleatorio
+(select id_centro_salud from centro_salud order by rand() limit 1), -- centro de salud aleatorio
+(select id_zona_cuerpo from zona_cuerpo order by rand() limit 1), -- zona cuerpo aleatoria
+(select cuil_profesional from profesional order by rand() limit 1), -- seleccionar profesional aleatorio
+(select cuil_paciente from paciente join persona on paciente.cuil_paciente = persona.cuil_persona where persona.edad = 0 order by rand() limit 1), -- seleccionar recien nacidos
+'Practica Diagnostica'),
+((select id_nomenclatura from nomenclatura order by rand() limit 1), -- una nomenclatura aleatoria
+6, -- curativo invasivo
+(select id_efecto_principal from efecto_principal order by rand() limit 1), -- un efecto aleatorio
+(select id_centro_salud from centro_salud order by rand() limit 1), -- centro de salud aleatorio
+(select id_zona_cuerpo from zona_cuerpo order by rand() limit 1), -- zona cuerpo aleatoria
+(select cuil_profesional from profesional order by rand() limit 1), -- seleccionar profesional aleatorio
+(select cuil_paciente from paciente join persona on paciente.cuil_paciente = persona.cuil_persona where persona.edad = 0 order by rand() limit 1), -- seleccionar recien nacidos
+'Compuesto Farmacologico');
+
+-- Ingresar efectos de muerte para los recien nacidos
+
+INSERT INTO Efecto_adverso (cod_efecto_adverso, nombre, nivel_gravedad)values 
+(726374,'Reacciones cut�neas graves',5),
+(767464,'Hipersensibilidad a la luz solar',5),
+(182837,'Neuropat�a perif�rica',5),
+(522674,'Problemas cerebrales',5),
+(795637,'Problemas musculares',5),
+(178363,'Trombosis aguda',5),
+(483636,'Problemas �seos',5),
+(306253,'Problemas respiratorios',5),
+(250184,'Neumonia',5),
+(203647,'Problemas cardiovasculares',5);
+
+-- Introducir efectos_adversos de muerte para los recien nacidos
+INSERT INTO Produce (id_tratamiento, cod_efecto_adverso, fecha) values
+(64,(select cod_efecto_adverso from efecto_adverso join gravedad on efecto_adverso.nivel_gravedad = gravedad.nivel_gravedad where descripcion = "Muerte" order by rand() limit 1),'20230605'),
+(51,(select cod_efecto_adverso from efecto_adverso join gravedad on efecto_adverso.nivel_gravedad = gravedad.nivel_gravedad where descripcion = "Muerte" order by rand() limit 1),'20221020'),
+(66,(select cod_efecto_adverso from efecto_adverso join gravedad on efecto_adverso.nivel_gravedad = gravedad.nivel_gravedad where descripcion = "Muerte" order by rand() limit 1),'20221212'),
+(54,(select cod_efecto_adverso from efecto_adverso join gravedad on efecto_adverso.nivel_gravedad = gravedad.nivel_gravedad where descripcion = "Muerte" order by rand() limit 1),'20210511'),
+(52,(select cod_efecto_adverso from efecto_adverso join gravedad on efecto_adverso.nivel_gravedad = gravedad.nivel_gravedad where descripcion = "Muerte" order by rand() limit 1),'20221217'),
+(56,(select cod_efecto_adverso from efecto_adverso join gravedad on efecto_adverso.nivel_gravedad = gravedad.nivel_gravedad where descripcion = "Muerte" order by rand() limit 1),'20211019'),
+(60,(select cod_efecto_adverso from efecto_adverso join gravedad on efecto_adverso.nivel_gravedad = gravedad.nivel_gravedad where descripcion = "Muerte" order by rand() limit 1),'20220216'),
+(55,(select cod_efecto_adverso from efecto_adverso join gravedad on efecto_adverso.nivel_gravedad = gravedad.nivel_gravedad where descripcion = "Muerte" order by rand() limit 1),'20210705'),
+(63,(select cod_efecto_adverso from efecto_adverso join gravedad on efecto_adverso.nivel_gravedad = gravedad.nivel_gravedad where descripcion = "Muerte" order by rand() limit 1),'20220825'),
+(64,(select cod_efecto_adverso from efecto_adverso join gravedad on efecto_adverso.nivel_gravedad = gravedad.nivel_gravedad where descripcion = "Grave" order by rand() limit 1),'20220427');
+
+-- Tratamientos invasivos para madres
+INSERT INTO Tratamiento (id_nomenclatura, id_tipo_tratamiento, id_efecto_principal, id_centro_salud, id_zona_cuerpo, cuil_profesional, cuil_paciente, de_tipo) values
+((select id_nomenclatura from nomenclatura order by rand() limit 1),2,(select id_efecto_principal from efecto_principal order by rand() limit 1),(select id_centro_salud from centro_salud order by rand() limit 1),(select id_zona_cuerpo from zona_cuerpo order by rand() limit 1),(select cuil_profesional from profesional order by rand() limit 1),20123455876,"Compuesto farmacologico"),
+((select id_nomenclatura from nomenclatura order by rand() limit 1),6,(select id_efecto_principal from efecto_principal order by rand() limit 1),(select id_centro_salud from centro_salud order by rand() limit 1),(select id_zona_cuerpo from zona_cuerpo order by rand() limit 1),(select cuil_profesional from profesional order by rand() limit 1),20398945783,"Practica diagnostica"),
+((select id_nomenclatura from nomenclatura order by rand() limit 1),6,(select id_efecto_principal from efecto_principal order by rand() limit 1),(select id_centro_salud from centro_salud order by rand() limit 1),(select id_zona_cuerpo from zona_cuerpo order by rand() limit 1),(select cuil_profesional from profesional order by rand() limit 1),2012345789,"Practica quirurgica"),
+((select id_nomenclatura from nomenclatura order by rand() limit 1),6,(select id_efecto_principal from efecto_principal order by rand() limit 1),(select id_centro_salud from centro_salud order by rand() limit 1),(select id_zona_cuerpo from zona_cuerpo order by rand() limit 1),(select cuil_profesional from profesional order by rand() limit 1),62827386287,"Practica quirurgica"),
+((select id_nomenclatura from nomenclatura order by rand() limit 1),2,(select id_efecto_principal from efecto_principal order by rand() limit 1),(select id_centro_salud from centro_salud order by rand() limit 1),(select id_zona_cuerpo from zona_cuerpo order by rand() limit 1),(select cuil_profesional from profesional order by rand() limit 1),20123456780,"Practica diagnostica");
+
+-- Insertar tratamientos aleatorios para de tipo diagnostico presuntivo
+INSERT INTO Tratamiento (id_nomenclatura, id_tipo_tratamiento, id_efecto_principal, id_centro_salud, id_zona_cuerpo, cuil_profesional, cuil_paciente, de_tipo) values
+(
+	(select id_nomenclatura from nomenclatura order by rand() limit 1),
+	1,
+	(select id_efecto_principal from efecto_principal order by rand() limit 1),
+    (select id_centro_salud from centro_salud order by rand() limit 1),
+    (select id_zona_cuerpo from zona_cuerpo order by rand() limit 1),
+    (select cuil_profesional from profesional order by rand() limit 1),
+    (select cuil_paciente from paciente join persona on paciente.cuil_paciente = persona.cuil_persona where persona.edad between 20 and 30 order by rand() limit 1),
+    "Practica diagnostica");
+
+-- Ver cuantas practicas diagnosticas tengo
+select * from tratamiento
+where de_tipo = "Practica diagnostica";
+
+-- Insertar practicas diagnosticas con confirmacion aleatoria
+insert into practica_diagnostica (id_tratamiento, confirmacion_dpresuntivo) values
+	((select id_tratamiento from tratamiento where de_tipo = "Practica diagnostica" order by rand() limit 1),
+    (SELECT rand() * 1));
+    
+-- Insertar algunos beneficios en el tratamiento 30 --
+insert into se_espera values
+(30, (select id_beneficio from beneficio order by rand() limit 1));
+
+-- Insertar algunos beneficios en el tratamiento 27 --
+insert into se_espera values
+(27, (select id_beneficio from beneficio order by rand() limit 1));

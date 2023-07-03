@@ -38,6 +38,7 @@ CREATE TABLE `practica_diagnostica` (
 
 LOCK TABLES `practica_diagnostica` WRITE;
 /*!40000 ALTER TABLE `practica_diagnostica` DISABLE KEYS */;
+INSERT INTO `practica_diagnostica` VALUES (51,0),(55,1),(63,1),(72,1),(75,0),(76,0),(77,1),(78,1),(79,1),(80,1),(81,0),(82,0),(83,0),(84,0),(85,0);
 /*!40000 ALTER TABLE `practica_diagnostica` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-01 13:54:09
+-- Dump completed on 2023-07-03  3:11:25

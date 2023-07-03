@@ -26,9 +26,9 @@ DROP TABLE IF EXISTS `especialidad`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `especialidad` (
   `id_especialidad` int NOT NULL AUTO_INCREMENT,
-  `descripción` varchar(50) NOT NULL,
+  `descripcion` varchar(50) NOT NULL,
   PRIMARY KEY (`id_especialidad`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,6 +37,7 @@ CREATE TABLE `especialidad` (
 
 LOCK TABLES `especialidad` WRITE;
 /*!40000 ALTER TABLE `especialidad` DISABLE KEYS */;
+INSERT INTO `especialidad` VALUES (1,'Cardiología'),(2,'Dermatología'),(3,'Endocrinología'),(4,'Gastroenterología'),(5,'Hematología'),(6,'Neurología'),(7,'Oftalmología'),(8,'Oncología'),(9,'Ortopedia'),(10,'Pediatría'),(11,'Psicología'),(12,'Psiquiatría'),(13,'Radiología'),(14,'Reumatología'),(15,'Urología'),(16,'Ginecología'),(17,'Nefrología'),(18,'Otorrinolaringología'),(19,'Neumología'),(20,'Cirugía Plástica');
 /*!40000 ALTER TABLE `especialidad` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -49,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-01 13:54:07
+-- Dump completed on 2023-07-03  3:11:26
