@@ -38,6 +38,7 @@ CREATE TABLE `practica_quirurgica` (
 
 LOCK TABLES `practica_quirurgica` WRITE;
 /*!40000 ALTER TABLE `practica_quirurgica` DISABLE KEYS */;
+INSERT INTO `practica_quirurgica` VALUES (86,1),(87,1),(88,1);
 /*!40000 ALTER TABLE `practica_quirurgica` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-03  3:11:26
+-- Dump completed on 2023-07-03 20:22:49

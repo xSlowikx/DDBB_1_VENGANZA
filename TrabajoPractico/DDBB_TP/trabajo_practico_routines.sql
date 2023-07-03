@@ -18,6 +18,19 @@ USE `trabajo_practico`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Temporary view structure for view `promedios_ben_xnomenclatura`
+--
+
+DROP TABLE IF EXISTS `promedios_ben_xnomenclatura`;
+/*!50001 DROP VIEW IF EXISTS `promedios_ben_xnomenclatura`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `promedios_ben_xnomenclatura` AS SELECT 
+ 1 AS `id_nomenclatura`,
+ 1 AS `cantidad`*/;
+SET character_set_client = @saved_cs_client;
+
+--
 -- Temporary view structure for view `promedios_adv_xnomenclatura`
 --
 
@@ -31,17 +44,34 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = @saved_cs_client;
 
 --
--- Temporary view structure for view `promedios_ben_xnomenclatura`
+-- Temporary view structure for view `tr_no_pel_en_amay`
 --
 
-DROP TABLE IF EXISTS `promedios_ben_xnomenclatura`;
-/*!50001 DROP VIEW IF EXISTS `promedios_ben_xnomenclatura`*/;
+DROP TABLE IF EXISTS `tr_no_pel_en_amay`;
+/*!50001 DROP VIEW IF EXISTS `tr_no_pel_en_amay`*/;
 SET @saved_cs_client     = @@character_set_client;
 /*!50503 SET character_set_client = utf8mb4 */;
-/*!50001 CREATE VIEW `promedios_ben_xnomenclatura` AS SELECT 
- 1 AS `id_nomenclatura`,
- 1 AS `cantidad`*/;
+/*!50001 CREATE VIEW `tr_no_pel_en_amay` AS SELECT 
+ 1 AS `id_tratamiento`*/;
 SET character_set_client = @saved_cs_client;
+
+--
+-- Final view structure for view `promedios_ben_xnomenclatura`
+--
+
+/*!50001 DROP VIEW IF EXISTS `promedios_ben_xnomenclatura`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `promedios_ben_xnomenclatura` AS select `promedio_efectos_buenos`.`id_nomenclatura` AS `id_nomenclatura`,avg(`promedio_efectos_buenos`.`cantidad`) AS `cantidad` from (select `tratamiento`.`id_nomenclatura` AS `id_nomenclatura`,count(`se_espera`.`id_beneficio`) AS `cantidad` from ((((`tratamiento` join `persona` on((`tratamiento`.`cuil_paciente` = `persona`.`cuil_persona`))) join `nomenclatura` on((`tratamiento`.`id_nomenclatura` = `nomenclatura`.`id_nomenclatura`))) join `se_espera` on((`tratamiento`.`id_tratamiento` = `se_espera`.`id_tratamiento`))) join `beneficio` on((`se_espera`.`id_beneficio` = `beneficio`.`id_beneficio`))) where ((`beneficio`.`id_categoria` >= 3) and (`persona`.`edad` < 13)) group by `tratamiento`.`id_tratamiento`,`tratamiento`.`id_nomenclatura`) `promedio_efectos_buenos` group by `promedio_efectos_buenos`.`id_nomenclatura` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
 -- Final view structure for view `promedios_adv_xnomenclatura`
@@ -62,10 +92,10 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
--- Final view structure for view `promedios_ben_xnomenclatura`
+-- Final view structure for view `tr_no_pel_en_amay`
 --
 
-/*!50001 DROP VIEW IF EXISTS `promedios_ben_xnomenclatura`*/;
+/*!50001 DROP VIEW IF EXISTS `tr_no_pel_en_amay`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
@@ -74,7 +104,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `promedios_ben_xnomenclatura` AS select `promedio_efectos_buenos`.`id_nomenclatura` AS `id_nomenclatura`,avg(`promedio_efectos_buenos`.`cantidad`) AS `cantidad` from (select `tratamiento`.`id_nomenclatura` AS `id_nomenclatura`,count(`se_espera`.`id_beneficio`) AS `cantidad` from ((((`tratamiento` join `persona` on((`tratamiento`.`cuil_paciente` = `persona`.`cuil_persona`))) join `nomenclatura` on((`tratamiento`.`id_nomenclatura` = `nomenclatura`.`id_nomenclatura`))) join `se_espera` on((`tratamiento`.`id_tratamiento` = `se_espera`.`id_tratamiento`))) join `beneficio` on((`se_espera`.`id_beneficio` = `beneficio`.`id_beneficio`))) where ((`beneficio`.`id_categoria` >= 3) and (`persona`.`edad` < 13)) group by `tratamiento`.`id_tratamiento`,`tratamiento`.`id_nomenclatura`) `promedio_efectos_buenos` group by `promedio_efectos_buenos`.`id_nomenclatura` */;
+/*!50001 VIEW `tr_no_pel_en_amay` AS select `tratamiento`.`id_tratamiento` AS `id_tratamiento` from (`tratamiento` join `persona` on((`tratamiento`.`cuil_paciente` = `persona`.`cuil_persona`))) where ((`persona`.`id_rango_etario` in (7,8)) and exists(select 1 from (`produce` join `efecto_adverso` on((`produce`.`cod_efecto_adverso` = `efecto_adverso`.`cod_efecto_adverso`))) where ((`efecto_adverso`.`nivel_gravedad` > 1) and (`produce`.`id_tratamiento` = `tratamiento`.`id_tratamiento`))) is false) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -88,4 +118,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-03  3:11:26
+-- Dump completed on 2023-07-03 20:22:51

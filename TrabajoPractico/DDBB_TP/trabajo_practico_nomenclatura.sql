@@ -37,7 +37,7 @@ CREATE TABLE `nomenclatura` (
 
 LOCK TABLES `nomenclatura` WRITE;
 /*!40000 ALTER TABLE `nomenclatura` DISABLE KEYS */;
-INSERT INTO `nomenclatura` VALUES (1.01,'Vacuna contra la influenza'),(2.05,'Vacuna contra el sarampión'),(3.03,'Vacuna contra la varicela'),(4.02,'Vacuna contra la hepatitis B'),(5.01,'Vacuna contra el tétanos'),(6.04,'Vacuna contra la fiebre amarilla'),(7.01,'Vacuna contra la poliomielitis'),(8.02,'Vacuna contra la rubéola'),(9.01,'Vacuna contra la meningitis'),(10.03,'Vacuna contra la tos ferina');
+INSERT INTO `nomenclatura` VALUES (1.01,'Vacuna contra la influenza'),(2.05,'Vacuna contra el sarampión'),(3.03,'Vacuna contra la varicela'),(4.02,'Vacuna contra la hepatitis B'),(5.01,'Vacuna contra el tétanos'),(6.04,'Vacuna contra la fiebre amarilla'),(7.01,'Vacuna contra la poliomielitis'),(8.02,'Vacuna contra la rubéola'),(9.01,'Vacuna contra la meningitis'),(10.03,'Vacuna contra la tos ferina'),(35.40,'Cirugia abdominal'),(37.50,'Cirugia por peritonitis'),(38.40,'Extraccion de quistes en los parpados');
 /*!40000 ALTER TABLE `nomenclatura` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-03  3:11:25
+-- Dump completed on 2023-07-03 20:22:50
