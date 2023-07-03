@@ -794,3 +794,110 @@ insert into se_espera values
 -- Insertar algunos beneficios en el tratamiento 27 --
 insert into se_espera values
 (27, (select id_beneficio from beneficio order by rand() limit 1));
+
+
+-- Insertar niveles de gravedad en tratamientos de adultos mayores --
+INSERT INTO produce 
+(id_tratamiento, cod_efecto_adverso, fecha)
+VALUES (
+  (CASE FLOOR(RAND() * 3)
+    WHEN 0 THEN 71
+    WHEN 1 THEN 44
+    WHEN 2 THEN 47
+  END),
+  (SELECT cod_efecto_adverso FROM efecto_adverso WHERE nivel_gravedad = 1 ORDER BY RAND() LIMIT 1),
+  "20221225"
+);
+
+/* Insertar mas de 2 antecedentes al cuil 20123455876*/
+insert into antecedente
+values
+(20123455876,
+(select cie10 from diagnostico order by rand() limit 1),
+"20210625");
+
+/* Insertar solo 2 antecedentes al cuil 34876927497*/
+insert into antecedente
+values
+(34876927497,
+(select cie10 from diagnostico order by rand() limit 1),
+"20211210");
+
+
+select *
+from paciente
+join persona on paciente.cuil_paciente = persona.cuil_persona
+where not exists (select 1 from tratamiento
+					where tratamiento.cuil_paciente = paciente.cuil_paciente);
+
+-- Insertar tratamientos de practica quirurgica --
+insert into tratamiento (id_nomenclatura, id_tipo_tratamiento, id_efecto_principal, id_centro_salud, id_zona_cuerpo, cuil_profesional, cuil_paciente, de_tipo)
+values
+(35.40, 5, 
+(select id_efecto_principal from efecto_principal order by rand() limit 1), 
+(select id_centro_salud from centro_salud order by rand() limit 1),
+(select id_zona_cuerpo from zona_cuerpo order by rand() limit 1),
+(select cuil_profesional from profesional order by rand() limit 1),
+22345345896,
+"Practica quirurgica");
+
+insert into tratamiento (id_nomenclatura, id_tipo_tratamiento, id_efecto_principal, id_centro_salud, id_zona_cuerpo, cuil_profesional, cuil_paciente, de_tipo)
+values
+(37.50, 5, 
+(select id_efecto_principal from efecto_principal order by rand() limit 1), 
+(select id_centro_salud from centro_salud order by rand() limit 1),
+(select id_zona_cuerpo from zona_cuerpo order by rand() limit 1),
+(select cuil_profesional from profesional order by rand() limit 1),
+20123446781,
+"Practica quirurgica");
+
+insert into tratamiento (id_nomenclatura, id_tipo_tratamiento, id_efecto_principal, id_centro_salud, id_zona_cuerpo, cuil_profesional, cuil_paciente, de_tipo)
+values
+(38.40, 5, 
+(select id_efecto_principal from efecto_principal order by rand() limit 1), 
+(select id_centro_salud from centro_salud order by rand() limit 1),
+(select id_zona_cuerpo from zona_cuerpo order by rand() limit 1),
+(select cuil_profesional from profesional order by rand() limit 1),
+91080571907,
+"Practica quirurgica");
+
+select * from tratamiento where de_tipo = "practica quirurgica";
+
+-- Insertar practica quirurgica --
+insert into practica_quirurgica
+values
+(86,1);
+
+-- Insertar practica quirurgica --
+insert into practica_quirurgica
+values
+(87,1);
+
+-- Insertar practica quirurgica --
+insert into practica_quirurgica
+values
+(88,1);
+
+-- Insertar efectos adversos --
+insert into produce
+	(id_tratamiento, cod_efecto_adverso, fecha)
+values
+	(86,(select cod_efecto_adverso from efecto_adverso where nivel_gravedad in(1,2) order by rand() limit 1),"20220814");
+    
+-- Insertar efectos adversos --
+insert into produce
+	(id_tratamiento, cod_efecto_adverso, fecha)
+values
+	(87,(select cod_efecto_adverso from efecto_adverso where nivel_gravedad in(1,2) order by rand() limit 1),"20220901");
+    
+-- Insertar efectos adversos --
+insert into produce
+	(id_tratamiento, cod_efecto_adverso, fecha)
+values
+	(88,(select cod_efecto_adverso from efecto_adverso where nivel_gravedad in(1,2,3) order by rand() limit 1),"20230325");
+    
+select *
+from produce
+join efecto_adverso on produce.cod_efecto_adverso = efecto_adverso.cod_efecto_adverso
+where nivel_gravedad = 3
+and produce.id_tratamiento = 88;

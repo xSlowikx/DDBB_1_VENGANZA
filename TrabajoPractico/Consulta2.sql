@@ -1,4 +1,4 @@
-/* Consulta 3: Cantidad de personas con algún tratamiento diagnóstico que no haya confirmado el diagnóstico.*/
+/* Consulta 2: Cantidad de personas con algún tratamiento diagnóstico que no haya confirmado el diagnóstico.*/
 
 select count(*) as "Diagnosticos no confirmados"
 from (select tratamiento.cuil_paciente

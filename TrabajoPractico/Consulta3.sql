@@ -1,4 +1,7 @@
-/*Consulta 3: ¿Cuántas personas ha habido que hayan tenido la mayor cantidad de efectos adversos de algún tratamiento de vacunación? */
+/* Consulta 3: ¿Cuántas personas ha habido que hayan tenido la mayor cantidad de efectos adversos de algún tratamiento de vacunación? */
+
+/* Primera opcion, busco el tratamiento de vacunacion con la mayor cantidad de efectos adversos y despues busco algun paciente que en algun tratamiento tenga esa cantidad (deberian ser 2)*/
+
 select count(*)
 from (
 	select distinct cuil_paciente

@@ -1,4 +1,4 @@
-/* Formulen una consulta que permita a un profesional médico descartar un tratamiento en niños por ser el riesgo mayor al beneficio.
+/* Consulta 6: Formulen una consulta que permita a un profesional médico descartar un tratamiento en niños por ser el riesgo mayor al beneficio.
 ¿Qué otra información guardarían para realizar esta comparación? Incluirla en el modelo completo. */
 
 /* Primer acercamiento, descartar un tratamiento por nomenclatura (el nombre del tratamiento en si) si hay algun otro tratamiento de la misma nomenclatura donde un menor de 13 anios

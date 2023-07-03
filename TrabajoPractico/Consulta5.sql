@@ -1,4 +1,4 @@
-/* Consulta 7: ¿Cuántas muertes de recién nacidos se pueden relacionar a medicamentos administrados a la madre?
+/* Consulta 5: ¿Cuántas muertes de recién nacidos se pueden relacionar a medicamentos administrados a la madre?
 Si el modelo realizado no permite contestar esta pregunta, modificarlo para poder hacerlo. */
 
 -- Version con in --

@@ -1,4 +1,4 @@
-/*Consulta 1: Top 10 de tratamientos con más de 10 efectos adversos. */
+/* Consulta 1: Top 10 de tratamientos con más de 10 efectos adversos. */
 
 SELECT tratamiento.id_tratamiento, nomenclatura.nomenclatura, cantidades_xtratamiento.cantidad
 from tratamiento join nomenclatura on tratamiento.id_nomenclatura = nomenclatura.id_nomenclatura
