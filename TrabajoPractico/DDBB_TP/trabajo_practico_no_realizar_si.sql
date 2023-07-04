@@ -18,15 +18,16 @@ USE `trabajo_practico`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `no_usar_si`
+-- Table structure for table `no_realizar_si`
 --
 
-DROP TABLE IF EXISTS `no_usar_si`;
+DROP TABLE IF EXISTS `no_realizar_si`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `no_usar_si` (
+CREATE TABLE `no_realizar_si` (
   `id_tratamiento` int NOT NULL,
   `id_contraindicacion` tinyint NOT NULL,
+  `veracidad` tinyint(1) NOT NULL,
   PRIMARY KEY (`id_tratamiento`,`id_contraindicacion`),
   KEY `fk_id_contraindicacion` (`id_contraindicacion`),
   CONSTRAINT `fk_id_contraindicacion` FOREIGN KEY (`id_contraindicacion`) REFERENCES `contraindicacion` (`id_contraindicacion`),
@@ -35,12 +36,12 @@ CREATE TABLE `no_usar_si` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `no_usar_si`
+-- Dumping data for table `no_realizar_si`
 --
 
-LOCK TABLES `no_usar_si` WRITE;
-/*!40000 ALTER TABLE `no_usar_si` DISABLE KEYS */;
-/*!40000 ALTER TABLE `no_usar_si` ENABLE KEYS */;
+LOCK TABLES `no_realizar_si` WRITE;
+/*!40000 ALTER TABLE `no_realizar_si` DISABLE KEYS */;
+/*!40000 ALTER TABLE `no_realizar_si` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-03 20:22:50
+-- Dump completed on 2023-07-04  0:41:43
