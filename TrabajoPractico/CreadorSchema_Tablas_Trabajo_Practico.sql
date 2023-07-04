@@ -25,8 +25,6 @@ CREATE TABLE IF NOT EXISTS Persona (
     CONSTRAINT fk_cuil_madre FOREIGN KEY (cuil_madre) REFERENCES persona (cuil_persona)
 );
 
-set foreign_key_checks = 1;
-
 -- AGREGO LA COLUMNA DE RANGO_ETARIO --
 alter table persona
 add column id_rango_etario tinyint not null;
@@ -217,6 +215,7 @@ create table if not exists Efecto_principal (
 create table if not exists Contraindicacion (
 	id_contraindicacion tinyint auto_increment,
     nombre varchar (100) not null,
+    veracidad tinyint(1) not null,
     constraint pk_contraindicacion primary key (id_contraindicacion)
 );
 

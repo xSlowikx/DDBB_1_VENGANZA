@@ -14,7 +14,7 @@ and compuesto_farmacologico.id_tipo_compuesto = 2
 and nomenclatura.nomenclatura like "%vacuna%"
 group by tratamiento.id_nomenclatura, nomenclatura.nomenclatura;
 
--- Misma consulta, solo que con alias de tablas --
+-- Misma consulta, solo que con alias de tablas y sin el nombre de la nomenclatura--
 
 select T.id_nomenclatura, count(P.cod_efecto_adverso)
 from compuesto_farmacologico CF

@@ -218,7 +218,7 @@ values
     
 -- Insertar contraindicaciones --
 insert into contraindicacion
-	(nombre)
+	(nombre, veracidad)
 values
 	('Embarazo'),
     ('Lactancia'),
