@@ -81,6 +81,16 @@ from (	select tratamiento.id_nomenclatura as id_nomenclatura, count(produce.cod_
 		group by tratamiento.id_tratamiento, tratamiento.id_nomenclatura) as promedio_efectos_malos
 group by promedio_efectos_malos.id_nomenclatura;
 
+select tratamiento.id_nomenclatura as id_nomenclatura, count(produce.cod_efecto_adverso) as cantidad
+		from tratamiento
+        join persona on tratamiento.cuil_paciente = persona.cuil_persona
+		join nomenclatura on tratamiento.id_nomenclatura = nomenclatura.id_nomenclatura
+		join produce on tratamiento.id_tratamiento = produce.id_tratamiento
+		join efecto_adverso on produce.cod_efecto_adverso = efecto_adverso.cod_efecto_adverso
+		where efecto_adverso.nivel_gravedad <= 3
+        and persona.edad < 13
+		group by tratamiento.id_tratamiento, tratamiento.id_nomenclatura;
+
 -- Probando vista --
 
 select * from promedios_adv_xnomenclatura;

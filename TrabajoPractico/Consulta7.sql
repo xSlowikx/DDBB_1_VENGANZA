@@ -11,7 +11,8 @@ and tratamiento.id_tratamiento in (select id_tratamiento from tr_no_pel_en_amay)
 
 /* Version 2*/
 select distinct tratamiento.id_tratamiento, nomenclatura.nomenclatura
-from tratamiento join nomenclatura on tratamiento.id_nomenclatura = nomenclatura.id_nomenclatura
+from tratamiento
+join nomenclatura on tratamiento.id_nomenclatura = nomenclatura.id_nomenclatura
 join persona on tratamiento.cuil_paciente = persona.cuil_persona
 join antecedente on persona.cuil_persona = antecedente.cuil_persona
 where persona.id_rango_etario in (7,8)
@@ -28,6 +29,12 @@ and tratamiento.id_tratamiento in (
 														and produce.id_tratamiento = tratamiento.id_tratamiento
 				));
 
+select tratamiento.id_tratamiento, nomenclatura.nomenclatura
+from tratamiento
+join nomenclatura on tratamiento.id_nomenclatura = nomenclatura.id_nomenclatura
+join persona on tratamiento.cuil_paciente = persona.cuil_persona
+join antecedente on persona.cuil_persona = antecedente.cuil_persona
+where persona.id_rango_etario in (7,8);
 
 -- Este view me trae los tratamientos no peligrosos en personas del rango etario 7,8 (41-50 / 51-70) que fueron definidos como adultos mayores
 create view tr_no_pel_en_amay as

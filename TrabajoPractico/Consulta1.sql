@@ -9,3 +9,6 @@ join (select id_tratamiento as id_tratamiento, count(*) as cantidad
 on tratamiento.id_tratamiento = cantidades_xtratamiento.id_tratamiento
 ORDER BY cantidades_xtratamiento.cantidad desc
 limit 10;
+
+SELECT tratamiento.id_tratamiento, nomenclatura.nomenclatura
+from tratamiento join nomenclatura on tratamiento.id_nomenclatura = nomenclatura.id_nomenclatura;
